@@ -844,12 +844,19 @@ function tag.viewmore(tags, screen)
 end
 
 --- Toggle selection of a tag
--- @function atomi.tag.viewtoggle
+-- @function tag.view_toggle
 -- @see selected
 -- @tparam tag t Tag to be toggled
-function tag.viewtoggle(t)
-    t.selected = not t.selected
-    capi.screen[tag.getproperty(t, "screen")]:emit_signal("tag::history::update")
+function tag.object.view_toggle(self, screen)
+    screen = get_screen(screen or ascreen.focused())
+    if self.screen ~= screen then
+        self.screen = screen
+        self.selected = true
+    else
+        self.selected = not self.selected
+    end
+
+    capi.screen[tag.getproperty(self, "screen")]:emit_signal("tag::history::update")
 end
 
 --- Get tag data table.

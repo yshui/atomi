@@ -142,7 +142,7 @@ mytaglist.buttons = atomi.util.table.join(
                                                   client.focus:move_to_tag(t)
                                               end
                                           end),
-                    atomi.button({ }, 3, atomi.tag.viewtoggle),
+                    atomi.button({ }, 3, function(t) t:view_toggle() end),
                     atomi.button({ modkey }, 3, function(t)
                                               if client.focus then
                                                   client.focus:toggle_tag(t)
@@ -331,7 +331,7 @@ globalkeys = atomi.util.table.join(
     atomi.key({ modkey, "Shift"   }, "h",     function () atomi.tag.incnmaster( 1, nil, true) end,
               {description = "increase the number of master clients", group = "layout"}),
     atomi.key({ modkey, "Shift"   }, "l",     function () atomi.tag.incnmaster(-1, nil, true) end,
-              {description = "decrease the number of master clients", group = "layout"}),
+              screen{description = "decrease the number of master clients", group = "layout"}),
     atomi.key({ modkey, "Control" }, "h",     function () atomi.tag.incncol( 1, nil, true)    end,
               {description = "increase the number of columns", group = "layout"}),
     atomi.key({ modkey, "Control" }, "l",     function () atomi.tag.incncol(-1, nil, true)    end,
@@ -420,9 +420,10 @@ for i = 1, 9 do
         -- Toggle tag.
         atomi.key({ modkey, "Control" }, "#" .. i + 9,
                   function ()
+                      local screen = atomi.screen.focused()
                       local tag = root.tags()[i]
                       if tag then
-                         atomi.tag.viewtoggle(tag)
+                         tag:view_toggle(screen)
                       end
                   end,
                   {description = "toggle tag #" .. i, group = "tag"}),
