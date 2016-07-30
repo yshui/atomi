@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+-- This class has been moved to `wibox.container.background`
+--
+-- @author Uli Schlachter
+-- @copyright 2010 Uli Schlachter
+-- @release v3.5.2-1890-ge472339
+-- @classmod wibox.widget.background
+---------------------------------------------------------------------------
+local util = require("atomi.util")
+
+return util.deprecate_class(
+    require("wibox.container.background"),
+    "wibox.widget.background",
+    "wibox.container.background"
+)
+
+-- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80
