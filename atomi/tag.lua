@@ -113,19 +113,6 @@ function tag.object.get_index(query_tag)
     end
 end
 
---- Move a tag to an absolute position in the screen[]:tags() table.
--- @deprecated atomi.tag.move
--- @param new_index Integer absolute position in the table to insert.
--- @param target_tag The tag that should be moved. If null, the currently
--- selected tag is used.
--- @see index
-function tag.move(new_index, target_tag)
-    util.deprecate("Use t.index = new_index instead of atomi.tag.move")
-
-    target_tag = target_tag or ascreen.focused().selected_tag
-    tag.object.set_index(target_tag, new_index)
-end
-
 --- Swap 2 tags
 -- @function tag.swap
 -- @see tag.swap
@@ -204,14 +191,16 @@ function tag.add(name, props)
     return newtag
 end
 
---- Create a set of tags and attach it to a screen.
+--- Create a set of tags.
 -- @function atomi.tag.new
 -- @param names The tag name, in a table
 -- @param screen The tag screen, or 1 if not set.
 -- @param layout The layout or layout table to set for this tags by default.
 -- @return A table with all created tags.
-function tag.new(names, screen, layout)
-    screen = get_screen(screen or 1)
+function tag.new(names, layout)
+    -- Put all tags at screen 1 because why not
+    -- unselected tags are not visible anyway
+    local screen = get_screen(1)
     local tags = {}
     for id, name in ipairs(names) do
         table.insert(tags, id, tag.add(name, {screen = screen,
@@ -409,25 +398,12 @@ function tag.history.restore(screen, idx)
     s:emit_signal("tag::history::update")
 end
 
---- Get a list of all tags on a screen
--- @deprecated atomi.tag.gettags
--- @tparam screen s Screen
--- @return A table with all available tags
--- @see screen.tags
-function tag.gettags(s)
-    util.deprecate("Use s.tags instead of atomi.tag.gettags")
-
-    s = get_screen(s)
-
-    return s and s.tags or {}
-end
-
 --- Find a tag by name
 -- @tparam[opt] screen s The screen of the tag
 -- @tparam string name The name of the tag
 -- @return The tag found, or `nil`
-function tag.find_by_name(s, name)
-    local tags = s and s.tags or root.tags()
+function tag.find_by_name(name)
+    local tags = root.tags()
     for _, t in ipairs(tags) do
         if name == t.name then
             return t
@@ -453,9 +429,6 @@ function tag.object.set_screen(t, s)
 
     if s == old_screen then return end
 
-    -- Keeping the old index make very little sense when changing screen
-    tag.setproperty(t, "index", nil)
-
     -- Change the screen
     tag.setproperty(t, "screen", s)
 
@@ -465,74 +438,10 @@ function tag.object.set_screen(t, s)
         c:tags({t})
     end
 
-    -- Update all indexes
-    for _,screen in ipairs {old_screen, s} do
-        for i,t2 in ipairs(screen.tags) do
-            tag.setproperty(t2, "index", i)
-        end
-    end
-
     -- Restore the old screen history if the tag was selected
     if sel then
         tag.history.restore(old_screen, 1)
     end
-end
-
---- Set a tag's screen
--- @deprecated atomi.tag.setscreen
--- @see screen
--- @param s Screen
--- @param t tag object
-function tag.setscreen(s, t)
-    -- For API consistency, the arguments have been swapped for Awesome 3.6
-    -- this method is already deprecated, so be silent and swap the args
-    if type(t) == "number" then
-        s, t = t, s
-    end
-
-    util.deprecate("Use t.screen = s instead of atomi.tag.setscreen(t, s)")
-
-    tag.object.set_screen(t, s)
-end
-
---- Get a tag's screen
--- @deprecated atomi.tag.getscreen
--- @see screen
--- @param[opt] t tag object
--- @return Screen number
-function tag.getscreen(t)
-    util.deprecate("Use t.screen instead of atomi.tag.setscreen(t, s)")
-
-    -- A new getter is not required
-
-    t = t or ascreen.focused().selected_tag
-    local prop = tag.getproperty(t, "screen")
-    return prop and prop.index
-end
-
---- Return a table with all visible tags
--- @deprecated atomi.tag.selectedlist
--- @param s Screen.
--- @return A table with all selected tags.
--- @see screen.selected_tags
-function tag.selectedlist(s)
-    util.deprecate("Use s.selected_tags instead of atomi.tag.selectedlist")
-
-    s = get_screen(s or ascreen.focused())
-
-    return s.selected_tags
-end
-
---- Return only the first visible tag.
--- @deprecated atomi.tag.selected
--- @param s Screen.
--- @see screen.selected_tag
-function tag.selected(s)
-    util.deprecate("Use s.selected_tag instead of atomi.tag.selected")
-
-    s = get_screen(s or ascreen.focused())
-
-    return s.selected_tag
 end
 
 --- The tag master width factor.
@@ -566,18 +475,6 @@ function tag.object.get_master_width_factor(t)
     return tag.getproperty(t, "master_width_factor") or 0.5
 end
 
---- Set master width factor.
--- @deprecated atomi.tag.setmwfact
--- @see master_fill_policy
--- @see master_width_factor
--- @param mwfact Master width factor.
--- @param t The tag to modify, if null tag.selected() is used.
-function tag.setmwfact(mwfact, t)
-    util.deprecate("Use t.master_width_factor = mwfact instead of atomi.tag.setmwfact")
-
-    tag.object.get_master_width_factor(t or ascreen.focused().selected_tag, mwfact)
-end
-
 --- Increase master width factor.
 -- @function atomi.tag.incmwfact
 -- @see master_width_factor
@@ -586,17 +483,6 @@ end
 function tag.incmwfact(add, t)
     t = t or t or ascreen.focused().selected_tag
     tag.object.set_master_width_factor(t, tag.object.get_master_width_factor(t) + add)
-end
-
---- Get master width factor.
--- @deprecated atomi.tag.getmwfact
--- @see master_width_factor
--- @see master_fill_policy
--- @param[opt] t The tag.
-function tag.getmwfact(t)
-    util.deprecate("Use t.master_width_factor instead of atomi.tag.getmwfact")
-
-    return tag.object.get_master_width_factor(t or ascreen.focused().selected_tag)
 end
 
 --- An ordered list of layouts.
@@ -695,63 +581,6 @@ function tag.object.set_layout(t, layout)
     return layout
 end
 
---- Set layout.
--- @deprecated atomi.tag.setlayout
--- @see layout
--- @param layout a layout table or a constructor function
--- @param t The tag to modify
--- @return The layout
-function tag.setlayout(layout, t)
-    util.deprecate("Use t.layout = layout instead of atomi.tag.setlayout")
-
-    return tag.object.set_layout(t, layout)
-end
-
---- Define if the tag must be deleted when the last client is untagged.
---
--- This is useful to create "throw-away" tags for operation like 50/50
--- side-by-side views.
---
---    local t = atomi.tag.add("Temporary", {
---         screen   = client.focus.screen,
---         volatile = true,
---         clients  = {
---             client.focus,
---             atomi.client.focus.history.get(client.focus.screen, 1)
---         }
---    }
---
--- **Signal:**
---
--- * *property::volatile*
---
--- @property volatile
--- @param boolean
-
--- Volatile accessors are implicit
-
---- Set if the tag must be deleted when the last client is untagged
--- @deprecated atomi.tag.setvolatile
--- @see volatile
--- @tparam boolean volatile If the tag must be deleted when the last client is untagged
--- @param t The tag to modify, if null tag.selected() is used.
-function tag.setvolatile(volatile, t)
-    util.deprecate("Use t.volatile = volatile instead of atomi.tag.setvolatile")
-
-    tag.setproperty(t, "volatile", volatile)
-end
-
---- Get if the tag must be deleted when the last client closes
--- @deprecated atomi.tag.getvolatile
--- @see volatile
--- @param t The tag to modify, if null tag.selected() is used.
--- @treturn boolean If the tag will be deleted when the last client is untagged
-function tag.getvolatile(t)
-    util.deprecate("Use t.volatile instead of atomi.tag.getvolatile")
-
-    return tag.getproperty(t, "volatile") or false
-end
-
 --- The default gap.
 --
 -- @beautiful beautiful.useless_gap
@@ -780,17 +609,6 @@ function tag.object.get_gap(t)
     return tag.getproperty(t, "useless_gap") or ugly.useless_gap or 0
 end
 
---- Set the spacing between clients
--- @deprecated atomi.tag.setgap
--- @see gap
--- @param useless_gap The spacing between clients
--- @param t The tag to modify, if null tag.selected() is used.
-function tag.setgap(useless_gap, t)
-    util.deprecate("Use t.gap = useless_gap instead of atomi.tag.setgap")
-
-    tag.object.set_gap(t or ascreen.focused().selected_tag, useless_gap)
-end
-
 --- Increase the spacing between clients
 -- @function atomi.tag.incgap
 -- @see gap
@@ -799,23 +617,6 @@ end
 function tag.incgap(add, t)
     t = t or t or ascreen.focused().selected_tag
     tag.object.set_gap(t, tag.object.get_gap(t) + add)
-end
-
---- Get the spacing between clients.
--- @deprecated atomi.tag.getgap
--- @see gap
--- @tparam[opt=tag.selected()] tag t The tag.
--- @tparam[opt] int numclients Number of (tiled) clients.  Passing this will
---   return 0 for a single client.  You can override this function to change
---   this behavior.
-function tag.getgap(t, numclients)
-    util.deprecate("Use t.gap instead of atomi.tag.getgap")
-
-    if numclients == 1 then
-        return 0
-    end
-
-    return tag.object.get_gap(t or ascreen.focused().selected_tag)
 end
 
 --- Set size fill policy for the master client(s).
@@ -831,20 +632,6 @@ function tag.object.get_master_fill_policy(t)
     return tag.getproperty(t, "master_fill_policy") or "expand"
 end
 
---- Set size fill policy for the master client(s)
--- @deprecated atomi.tag.setmfpol
--- @see master_fill_policy
--- @tparam string policy Can be set to
--- "expand" (fill all the available workarea) or
--- "master_width_factor" (fill only an area inside the master width factor)
--- @tparam[opt=tag.selected()] tag t The tag to modify
-function tag.setmfpol(policy, t)
-    util.deprecate("Use t.master_fill_policy = policy instead of atomi.tag.setmfpol")
-
-    t = t or ascreen.focused().selected_tag
-    tag.setproperty(t, "master_fill_policy", policy)
-end
-
 --- Toggle size fill policy for the master client(s)
 -- between "expand" and "master_width_factor".
 -- @function atomi.tag.togglemfpol
@@ -853,25 +640,11 @@ end
 function tag.togglemfpol(t)
     t = t or ascreen.focused().selected_tag
 
-    if tag.getmfpol(t) == "expand" then
-        tag.setproperty(t, "master_fill_policy", "master_width_factor")
+    if t.master_fill_policy == "expand" then
+        t.master_fill_policy = "master_width_factor"
     else
-        tag.setproperty(t, "master_fill_policy", "expand")
+        t.master_fill_policy = "expand"
     end
-end
-
---- Get size fill policy for the master client(s)
--- @deprecated atomi.tag.getmfpol
--- @see master_fill_policy
--- @tparam[opt=tag.selected()] tag t The tag
--- @treturn string Possible values are
--- "expand" (fill all the available workarea, default one) or
--- "master_width_factor" (fill only an area inside the master width factor)
-function tag.getmfpol(t)
-    util.deprecate("Use t.master_fill_policy instead of atomi.tag.getmfpol")
-
-    t = t or ascreen.focused().selected_tag
-    return tag.getproperty(t, "master_fill_policy") or "expand"
 end
 
 --- Set the number of master windows.
@@ -892,28 +665,6 @@ function tag.object.set_master_count(t, nmaster)
 end
 
 function tag.object.get_master_count(t)
-    return tag.getproperty(t, "master_count") or 1
-end
-
---- 
--- @deprecated atomi.tag.setnmaster
--- @see master_count
--- @param nmaster The number of master windows.
--- @param[opt] t The tag.
-function tag.setnmaster(nmaster, t)
-    util.deprecate("Use t.master_count = nmaster instead of atomi.tag.setnmaster")
-
-    tag.object.set_master_count(t or ascreen.focused().selected_tag, nmaster)
-end
-
---- Get the number of master windows.
--- @deprecated atomi.tag.getnmaster
--- @see master_count
--- @param[opt] t The tag.
-function tag.getnmaster(t)
-    util.deprecate("Use t.master_count instead of atomi.tag.setnmaster")
-
-    t = t or ascreen.focused().selected_tag
     return tag.getproperty(t, "master_count") or 1
 end
 
@@ -946,40 +697,6 @@ function tag.incnmaster(add, t, sensible)
     end
 end
 
---- Set the tag icon.
---
--- **Signal:**
---
--- * *property::icon*
---
--- @property icon
--- @tparam path|surface icon The icon
-
--- accessors are implicit.
-
---- Set the tag icon
--- @deprecated atomi.tag.seticon
--- @see icon
--- @param icon the icon to set, either path or image object
--- @param _tag the tag
-function tag.seticon(icon, _tag)
-    util.deprecate("Use t.icon = icon instead of atomi.tag.seticon")
-
-    _tag = _tag or ascreen.focused().selected_tag
-    tag.setproperty(_tag, "icon", icon)
-end
-
---- Get the tag icon
--- @deprecated atomi.tag.geticon
--- @see icon
--- @param _tag the tag
-function tag.geticon(_tag)
-    util.deprecate("Use t.icon instead of atomi.tag.geticon")
-
-    _tag = _tag or ascreen.focused().selected_tag
-    return tag.getproperty(_tag, "icon")
-end
-
 --- Set the number of columns.
 --
 -- **Signal:**
@@ -998,32 +715,6 @@ function tag.object.set_column_count(t, ncol)
 end
 
 function tag.object.get_column_count(t)
-    return tag.getproperty(t, "column_count") or 1
-end
-
---- Set number of column windows.
--- @deprecated atomi.tag.setncol
--- @see column_count
--- @param ncol The number of column.
--- @param t The tag to modify, if null tag.selected() is used.
-function tag.setncol(ncol, t)
-    util.deprecate("Use t.column_count = new_index instead of atomi.tag.setncol")
-
-    t = t or ascreen.focused().selected_tag
-    if ncol >= 1 then
-        tag.setproperty(t, "ncol", ncol)
-        tag.setproperty(t, "column_count", ncol)
-    end
-end
-
---- Get number of column windows.
--- @deprecated atomi.tag.getncol
--- @see column_count
--- @param[opt] t The tag.
-function tag.getncol(t)
-    util.deprecate("Use t.column_count instead of atomi.tag.getncol")
-
-    t = t or ascreen.focused().selected_tag
     return tag.getproperty(t, "column_count") or 1
 end
 
@@ -1095,17 +786,6 @@ function tag.viewidx(i, screen)
     screen:emit_signal("tag::history::update")
 end
 
---- Get a tag's index in the gettags() table.
--- @deprecated atomi.tag.getidx
--- @see index
--- @param query_tag The tag object to find. [selected()]
--- @return The index of the tag, nil if the tag is not found.
-function tag.getidx(query_tag)
-    util.deprecate("Use t.index instead of atomi.tag.getidx")
-
-    return tag.object.get_index(query_tag or ascreen.focused().selected_tag)
-end
-
 --- View next tag. This is the same as tag.viewidx(1).
 -- @function atomi.tag.viewnext
 -- @param screen The screen.
@@ -1123,29 +803,26 @@ end
 --- View only a tag.
 -- @function tag.view_only
 -- @see selected
-function tag.object.view_only(self)
-    local tags = self.screen.tags
-    -- First, untag everyone except the viewed tag.
+function tag.object.view_only(self, screen)
+    screen = get_screen(screen or ascreen.focused())
+    local tags = screen.selected_tags
+    -- First, untag everyone except the viewed tag
     for _, _tag in pairs(tags) do
         if _tag ~= self then
             _tag.selected = false
         end
     end
+
+    -- Am I selected on another screen?
+    if self.screen ~= screen then
+        self.selected = false
+        self.screen = screen
+    end
     -- Then, set this one to selected.
     -- We need to do that in 2 operations so we avoid flickering and several tag
     -- selected at the same time.
     self.selected = true
-    capi.screen[self.screen]:emit_signal("tag::history::update")
-end
-
---- View only a tag.
--- @deprecated atomi.tag.viewonly
--- @see tag.view_only
--- @param t The tag object.
-function tag.viewonly(t)
-    util.deprecate("Use t:view_only() instead of atomi.tag.viewonly")
-
-    tag.object.view_only(t)
+    capi.screen[screen]:emit_signal("tag::history::update")
 end
 
 --- View only a set of tags.
@@ -1218,32 +895,6 @@ function tag.setproperty(_tag, prop, value)
     if data.tags[_tag][prop] ~= value then
         data.tags[_tag][prop] = value
         _tag:emit_signal("property::" .. prop)
-    end
-end
-
---- Tag a client with the set of current tags.
--- @deprecated atomi.tag.withcurrent
--- @param c The client to tag.
-function tag.withcurrent(c)
-    util.deprecate("Use c:to_selected_tags() instead of atomi.tag.selectedlist")
-
-    -- It can't use c:to_selected_tags() because atomi.tag is loaded before
-    -- atomi.client
-
-    local tags = {}
-    for _, t in ipairs(c:tags()) do
-        if get_screen(tag.getproperty(t, "screen")) == get_screen(c.screen) then
-            table.insert(tags, t)
-        end
-    end
-    if #tags == 0 then
-        tags = c.screen.selected_tags
-    end
-    if #tags == 0 then
-        tags = c.screen.tags
-    end
-    if #tags ~= 0 then
-        c:tags(tags)
     end
 end
 

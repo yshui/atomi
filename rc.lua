@@ -22,6 +22,8 @@ local photon = require("atomi.photon")
 local menubar = atomi.menubar
 local hotkeys_popup = require("atomi.hotkeys_popup").widget
 
+print(type(screen))
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -176,6 +178,10 @@ mytasklist.buttons = atomi.util.table.join(
                                               atomi.client.focus.byidx(-1)
                                           end))
 
+-- Create the tag table.
+print("TAG pre "..type(screen))
+atomi.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, atomi.layout.layouts[1])
+print("TAG post "..type(screen))
 atomi.screen.connect_for_each_screen(function(s)
     local swidth = 0
     local sheight = 0
@@ -202,6 +208,7 @@ atomi.screen.connect_for_each_screen(function(s)
 
     ugly.x.set_dpi(dpi, s)
 
+    print(type(screen))
     -- Wallpaper
     if ugly.wallpaper then
         local wallpaper = ugly.wallpaper
@@ -211,9 +218,6 @@ atomi.screen.connect_for_each_screen(function(s)
         end
         gears.wallpaper.maximized(wallpaper, s, true)
     end
-
-    -- Each screen has its own tag table.
-    atomi.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, atomi.layout.layouts[1])
 
     -- Create a textclock widget
     mytextclock[s] = atomi.widget.textclock(s)
@@ -394,7 +398,7 @@ clientkeys = atomi.util.table.join(
             c.maximized = not c.maximized
             c:raise()
         end ,
-        {description = "maximize", group = "client"}),
+        {description = "maximize", group = "client"})
 
 )
 
@@ -407,17 +411,16 @@ for i = 1, 9 do
         atomi.key({ modkey }, "#" .. i + 9,
                   function ()
                         local screen = atomi.screen.focused()
-                        local tag = screen.tags[i]
+                        local tag = root.tags()[i]
                         if tag then
-                           tag:view_only()
+                           tag:view_only(screen)
                         end
                   end,
                   {description = "view tag #"..i, group = "tag"}),
         -- Toggle tag.
         atomi.key({ modkey, "Control" }, "#" .. i + 9,
                   function ()
-                      local screen = atomi.screen.focused()
-                      local tag = screen.tags[i]
+                      local tag = root.tags()[i]
                       if tag then
                          atomi.tag.viewtoggle(tag)
                       end
@@ -427,7 +430,7 @@ for i = 1, 9 do
         atomi.key({ modkey, "Shift" }, "#" .. i + 9,
                   function ()
                       if client.focus then
-                          local tag = client.focus.screen.tags[i]
+                          local tag = root.tags()[i]
                           if tag then
                               client.focus:move_to_tag(tag)
                           end
@@ -438,7 +441,7 @@ for i = 1, 9 do
         atomi.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
                   function ()
                       if client.focus then
-                          local tag = client.focus.screen.tags[i]
+                          local tag = root.tags()[i]
                           if tag then
                               client.focus:toggle_tag(tag)
                           end
@@ -579,4 +582,5 @@ end)
 
 client.connect_signal("focus", function(c) c.border_color = ugly.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = ugly.border_normal end)
+print("END "..type(screen))
 -- }}}

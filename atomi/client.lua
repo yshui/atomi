@@ -441,19 +441,13 @@ end
 function client.object.to_selected_tags(self)
     local tags = {}
 
-    for _, t in ipairs(self:tags()) do
-        if get_screen(t.screen) == get_screen(self.screen) then
-            table.insert(tags, t)
-        end
-    end
-
     if self.screen then
         if #tags == 0 then
             tags = self.screen.selected_tags
         end
 
         if #tags == 0 then
-            tags = self.screen.tags
+            print("????")
         end
     end
 

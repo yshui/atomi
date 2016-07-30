@@ -282,14 +282,12 @@ function tasklist.filter.currenttags(c, screen)
     if get_screen(c.screen) ~= screen then return false end
     -- Include sticky client too
     if c.sticky then return true end
-    local tags = screen.tags
+    local tags = screen.selected_tags
     for _, t in ipairs(tags) do
-        if t.selected then
-            local ctags = c:tags()
-            for _, v in ipairs(ctags) do
-                if v == t then
-                    return true
-                end
+        local ctags = c:tags()
+        for _, v in ipairs(ctags) do
+            if v == t then
+                return true
             end
         end
     end

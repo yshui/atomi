@@ -30,11 +30,15 @@ end
 local taglist = { mt = {} }
 taglist.filter = {}
 
-local instances = nil
+--- Don't need to track instances of screen
+--- Tag change on one screen will affect all taglists any way
+-- local instances = nil
 
-function taglist.taglist_label(t, args, tb)
+function taglist.taglist_label(t, args, tb, other)
     if not args then args = {} end
     local theme = ugly.get()
+    local bg_focus_other = args.bg_focus_other or theme.taglist_bg_focus_other
+    local fg_focus_other = args.fg_focus_other or theme.taglist_fg_focus_other
     local fg_focus = args.fg_focus or theme.taglist_fg_focus or theme.fg_focus
     local bg_focus = args.bg_focus or theme.taglist_bg_focus or theme.bg_focus
     local fg_urgent = args.fg_urgent or theme.taglist_fg_urgent or theme.fg_urgent
@@ -94,8 +98,13 @@ function taglist.taglist_label(t, args, tb)
         end
     end
     if t.selected then
-        bg_color = bg_focus
-        fg_color = fg_focus
+        if not other then
+            bg_color = bg_focus
+            fg_color = fg_focus
+        else
+            bg_color = bg_focus_other
+            fg_color = fg_focus_other
+        end
     elseif tag.getproperty(t, "urgent") then
         if bg_urgent then bg_color = bg_urgent end
         if fg_urgent then fg_color = fg_urgent end
@@ -121,13 +130,13 @@ end
 
 local function taglist_update(s, w, buttons, filter, data, style, update_function)
     local tags = {}
-    for _, t in ipairs(s.tags) do
+    for _, t in ipairs(root.tags()) do
         if not tag.getproperty(t, "hide") and filter(t) then
             table.insert(tags, t)
         end
     end
 
-    local function label(c, tb) return taglist.taglist_label(c, style, tb) end
+    local function label(c, tb) return taglist.taglist_label(c, style, tb, c.screen ~= s) end
 
     update_function(w, nil, ugly.x.get_dpi(s), buttons, label, data, tags)
 end
@@ -163,59 +172,40 @@ function taglist.new(screen, filter, buttons, style, update_function, base_widge
 
     local data = setmetatable({}, { __mode = 'k' })
 
-    local queued_update = {}
+    local queued_update = false
     function w._do_taglist_update()
         -- Add a delayed callback for the first update.
-        if not queued_update[screen] then
+        if not queued_update then
             timer.delayed_call(function()
                 if screen.valid then
                     taglist_update(screen, w, buttons, filter, data, style, uf)
                 end
-                queued_update[screen] = false
+                queued_update = false
             end)
-            queued_update[screen] = true
+            queued_update = true
         end
     end
-    if instances == nil then
-        instances = setmetatable({}, { __mode = "k" })
-        local function u(s)
-            local i = instances[get_screen(s)]
-            if i then
-                for _, tlist in pairs(i) do
-                    tlist._do_taglist_update()
-                end
-            end
-        end
-        local uc = function (c) return u(c.screen) end
-        local ut = function (t) return u(t.screen) end
-        capi.client.connect_signal("focus", uc)
-        capi.client.connect_signal("unfocus", uc)
-        tag.attached_connect_signal(nil, "property::selected", ut)
-        tag.attached_connect_signal(nil, "property::icon", ut)
-        tag.attached_connect_signal(nil, "property::hide", ut)
-        tag.attached_connect_signal(nil, "property::name", ut)
-        tag.attached_connect_signal(nil, "property::activated", ut)
-        tag.attached_connect_signal(nil, "property::screen", ut)
-        tag.attached_connect_signal(nil, "property::index", ut)
-        tag.attached_connect_signal(nil, "property::urgent", ut)
-        capi.client.connect_signal("property::screen", function(c, old_screen)
-            u(c.screen)
-            u(old_screen)
-        end)
-        capi.client.connect_signal("tagged", uc)
-        capi.client.connect_signal("untagged", uc)
-        capi.client.connect_signal("unmanage", uc)
-        capi.screen.connect_signal("removed", function(s)
-            instances[get_screen(s)] = nil
-        end)
+
+    local function update_callback()
+        w._do_taglist_update()
     end
+
+    capi.client.connect_signal("focus", update_callback)
+    capi.client.connect_signal("unfocus", update_callback)
+    tag.attached_connect_signal(nil, "property::selected", update_callback)
+    tag.attached_connect_signal(nil, "property::icon", update_callback)
+    tag.attached_connect_signal(nil, "property::hide", update_callback)
+    tag.attached_connect_signal(nil, "property::name", update_callback)
+    tag.attached_connect_signal(nil, "property::activated", update_callback)
+    tag.attached_connect_signal(nil, "property::screen", update_callback)
+    tag.attached_connect_signal(nil, "property::index", update_callback)
+    tag.attached_connect_signal(nil, "property::urgent", update_callback)
+    capi.client.connect_signal("property::screen", update_callback)
+    capi.client.connect_signal("tagged", update_callback)
+    capi.client.connect_signal("untagged", update_callback)
+    capi.client.connect_signal("unmanage", update_callback)
+
     w._do_taglist_update()
-    local list = instances[screen]
-    if not list then
-        list = setmetatable({}, { __mode = "v" })
-        instances[screen] = list
-    end
-    table.insert(list, w)
     return w
 end
 
@@ -242,6 +232,7 @@ end
 function taglist.mt:__call(...)
     return taglist.new(...)
 end
+
 
 return setmetatable(taglist, taglist.mt)
 

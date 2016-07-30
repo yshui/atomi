@@ -389,34 +389,6 @@ function screen.disconnect_for_each_screen(func)
     capi.screen.disconnect_signal("added", func)
 end
 
---- A list of all tags on the screen.
---
--- This property is read only, use `tag.screen`, `atomi.tag.add`, `atomi.tag.new`
--- or `t:delete()` to alter this list.
---
--- @property tags
--- @param table
--- @treturn table A table with all available tags
-
-function screen.object.get_tags(s, unordered)
-    local tags = {}
-
-    for _, t in ipairs(root.tags()) do
-        if get_screen(t.screen) == s then
-            table.insert(tags, t)
-        end
-    end
-
-    -- Avoid infinite loop, + save some time
-    if not unordered then
-        table.sort(tags, function(a, b)
-            return (a.index or 9999) < (b.index or 9999)
-        end)
-    end
-
-    return tags
-end
-
 --- A list of all selected tags on the screen.
 -- @property selected_tags
 -- @param table
@@ -425,11 +397,11 @@ end
 -- @see client.to_selected_tags
 
 function screen.object.get_selected_tags(s)
-    local tags = screen.object.get_tags(s, true)
+    local tags = root.tags()
 
     local vtags = {}
     for _, t in pairs(tags) do
-        if t.selected then
+        if t.selected and t.screen == s then
             vtags[#vtags + 1] = t
         end
     end
