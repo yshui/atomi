@@ -65,7 +65,7 @@ function taglist.taglist_label(t, args, tb, other)
     local is_selected = false
     local cls = t:clients()
 
-    if sel and taglist_squares_sel then
+    if sel and taglist_squares_sel and not other then
         -- Check that the selected client is tagged with 't'.
         local seltags = sel:tags()
         for _, v in ipairs(seltags) do
