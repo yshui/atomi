@@ -445,10 +445,11 @@ function client.object.to_selected_tags(self)
         if #tags == 0 then
             tags = self.screen.selected_tags
         end
-
-        if #tags == 0 then
-            print("????")
+        print("CLIENT "..self.name)
+        for _, v in ipairs(tags) do
+            print("TAG "..v.name)
         end
+        print(#tags)
     end
 
     if #tags ~= 0 then

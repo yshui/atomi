@@ -179,9 +179,7 @@ mytasklist.buttons = atomi.util.table.join(
                                           end))
 
 -- Create the tag table.
-print("TAG pre "..type(screen))
 atomi.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, atomi.layout.layouts[1])
-print("TAG post "..type(screen))
 atomi.screen.connect_for_each_screen(function(s)
     local swidth = 0
     local sheight = 0
@@ -583,5 +581,8 @@ end)
 
 client.connect_signal("focus", function(c) c.border_color = ugly.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = ugly.border_normal end)
-print("END "..type(screen))
+
+
+-- Restore previously selected tags
+atomi.restore()
 -- }}}

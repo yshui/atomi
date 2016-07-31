@@ -66,6 +66,12 @@ function screen.object.get_square_distance(self, x, y)
     return grect.get_square_distance(get_screen(self).geometry, x, y)
 end
 
+function screen.object.get_name(self)
+    for k, _ in pairs(self.outputs) do
+        return k
+    end
+end
+
 ---
 -- Return screen number corresponding to the given (pixel) coordinates.
 -- The number returned can be used as an index into the global

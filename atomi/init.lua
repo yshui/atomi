@@ -60,6 +60,7 @@ return
     rules = require("atomi.rules");
     proton = require("atomi.proton");
     menubar = require("atomi.menubar");
+    restore = require("atomi.restore");
     spawn = spawn;
 }
 

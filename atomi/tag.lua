@@ -829,18 +829,21 @@ end
 -- @function atomi.tag.viewmore
 -- @param tags A table with tags to view only.
 -- @param[opt] screen The screen of the tags.
-function tag.viewmore(tags, screen)
-    screen = get_screen(screen or ascreen.focused())
-    local screen_tags = screen.tags
-    for _, _tag in ipairs(screen_tags) do
+function tag.viewmore(tags, s)
+    s = get_screen(s or ascreen.focused())
+    local stags = s.selected_tags
+    for _, _tag in ipairs(stags) do
         if not util.table.hasitem(tags, _tag) then
             _tag.selected = false
         end
     end
     for _, _tag in ipairs(tags) do
+        if _tag.screen ~= s then
+            _tag.screen = s
+        end
         _tag.selected = true
     end
-    screen:emit_signal("tag::history::update")
+    s:emit_signal("tag::history::update")
 end
 
 --- Toggle selection of a tag
@@ -994,36 +997,11 @@ capi.tag.connect_signal("request::select", tag.object.view_only)
 capi.screen.connect_signal("tag::history::update", tag.history.update)
 
 capi.screen.connect_signal("removed", function(s)
-    -- First give other code a chance to move the tag to another screen
-    for _, t in pairs(s.tags) do
-        t:emit_signal("request::screen")
-    end
-    -- Everything that's left: Tell everyone that these tags go away (other code
-    -- could e.g. save clients)
-    for _, t in pairs(s.tags) do
-        t:emit_signal("removal-pending")
-    end
-    -- Give other code yet another change to save clients
-    for _, c in pairs(capi.client.get(s)) do
-        c:emit_signal("request::tag", nil, { reason = "screen-removed" })
-    end
-    -- Then force all clients left to go somewhere random
-    local fallback = nil
-    for other_screen in capi.screen do
-        if #other_screen.tags > 0 then
-            fallback = other_screen.tags[1]
-            break
-        end
-    end
-    for _, t in pairs(s.tags) do
-        t:delete(fallback, true)
-    end
-    -- If any tag survived until now, forcefully get rid of it
-    for _, t in pairs(s.tags) do
-        t.activated = false
-
-        if data.tags[t] then
-            data.tags[t].screen = nil
+    -- Move all tags to screen 1
+    for _, t in pairs(root.tags()) do
+        if t.screen == s then
+            t.selected = false
+            t.screen = get_screen(1)
         end
     end
 end)
