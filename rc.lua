@@ -179,7 +179,7 @@ mytasklist.buttons = atomi.util.table.join(
                                           end))
 
 -- Create the tag table.
-atomi.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, atomi.layout.layouts[1])
+atomi.tag({ "1", "2", "3", "4" }, atomi.layout.layouts[1])
 atomi.screen.connect_for_each_screen(function(s)
     local swidth = 0
     local sheight = 0

@@ -8,22 +8,22 @@
 --![Usage example](../images/AUTOGEN_wibox_layout_defaults_ratio.svg)
 --
 -- @usage
---local w = wibox.widget {
+--local w = atomi.proton.widget {
 --    generic_widget( 'first'  ),
 --    generic_widget( 'second' ),
 --    generic_widget( 'third'  ),
---    layout  = wibox.layout.ratio.horizontal
+--    layout  = atomi.proton.layout.ratio.horizontal
 --}
 -- 
 --w:ajust_ratio(2, 0.44, 0.33, 0.22)
 -- @author Emmanuel Lepage Vallee
 -- @copyright 2016 Emmanuel Lepage Vallee
 -- @release v3.5.2-1890-ge472339
--- @classmod wibox.layout.ratio
+-- @classmod atomi.proton.layout.ratio
 ---------------------------------------------------------------------------
 
-local base  = require("wibox.widget.base" )
-local flex  = require("wibox.layout.flex" )
+local base  = require("atomi.proton.widget.base" )
+local flex  = require("atomi.proton.layout.flex" )
 local table = table
 local pairs = pairs
 local floor = math.floor
@@ -421,7 +421,7 @@ end
 
 --- When a mouse button is pressed over the widget.
 -- The position of the mouse press relative to the widget while geometry
--- contains the geometry of the widget relative to the wibox.
+-- contains the geometry of the widget relative to the atomi.proton.
 -- @signal button::press
 -- @tparam table widget The widget
 -- @tparam number lx The relative horizontal position.
@@ -440,7 +440,7 @@ end
 
 --- When a mouse button is released over the widget.
 -- The position of the mouse press relative to the widget while geometry
--- contains the geometry of the widget relative to the wibox.
+-- contains the geometry of the widget relative to the atomi.proton.
 -- @signal button::release
 -- @tparam table widget The widget
 -- @tparam number lx The relative horizontal position.

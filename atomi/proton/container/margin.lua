@@ -7,12 +7,12 @@
 -- @author Uli Schlachter
 -- @copyright 2010 Uli Schlachter
 -- @release v3.5.2-1890-ge472339
--- @classmod wibox.container.margin
+-- @classmod atomi.proton.container.margin
 ---------------------------------------------------------------------------
 
 local pairs = pairs
 local setmetatable = setmetatable
-local base = require("wibox.widget.base")
+local base = require("atomi.proton.widget.base")
 local gcolor = require("gears.color")
 local cairo = require("lgi").cairo
 local util = require("atomi.util")
@@ -188,7 +188,7 @@ end
 -- @param[opt] color A color for the margins.
 -- @param[opt] draw_empty whether or not to draw the margin when the content is empty
 -- @treturn table A new margin container
--- @function wibox.container.margin
+-- @function atomi.proton.container.margin
 local function new(widget, left, right, top, bottom, color, draw_empty)
     local ret = base.make_widget(nil, nil, {enable_properties = true})
 
@@ -272,7 +272,7 @@ end
 
 --- When a mouse button is pressed over the widget.
 -- The position of the mouse press relative to the widget while geometry
--- contains the geometry of the widget relative to the wibox.
+-- contains the geometry of the widget relative to the atomi.proton.
 -- @signal button::press
 -- @tparam table widget The widget
 -- @tparam number lx The relative horizontal position.
@@ -291,7 +291,7 @@ end
 
 --- When a mouse button is released over the widget.
 -- The position of the mouse press relative to the widget while geometry
--- contains the geometry of the widget relative to the wibox.
+-- contains the geometry of the widget relative to the atomi.proton.
 -- @signal button::release
 -- @tparam table widget The widget
 -- @tparam number lx The relative horizontal position.

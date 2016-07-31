@@ -2,7 +2,7 @@
 -- A stacked layout.
 --
 -- This layout display widgets on top of each other. It can be used to overlay
--- a `wibox.widget.textbox` on top of a `atomi.widget.progressbar` or manage
+-- a `atomi.proton.widget.textbox` on top of a `atomi.widget.progressbar` or manage
 -- "pages" where only one is visible at any given moment.
 --
 -- The indices are going from 1 (the bottom of the stack) up to the top of
@@ -13,20 +13,20 @@
 --![Usage example](../images/AUTOGEN_wibox_layout_defaults_stack.svg)
 --
 -- @usage
---wibox.widget {
+--atomi.proton.widget {
 --    generic_widget( 'first'  ),
 --    generic_widget( 'second' ),
 --    generic_widget( 'third'  ),
---    layout  = wibox.layout.stack
+--    layout  = atomi.proton.layout.stack
 --}
 -- @author Emmanuel Lepage Vallee
 -- @copyright 2016 Emmanuel Lepage Vallee
 -- @release v3.5.2-1890-ge472339
--- @classmod wibox.layout.stack
+-- @classmod atomi.proton.layout.stack
 ---------------------------------------------------------------------------
 
-local base  = require("wibox.widget.base" )
-local fixed = require("wibox.layout.fixed")
+local base  = require("atomi.proton.widget.base" )
+local fixed = require("atomi.proton.layout.fixed")
 local table = table
 local pairs = pairs
 local util  = require("atomi.util")
@@ -174,7 +174,7 @@ function stack:raise_widget(widget, recursive)
 end
 
 --- Create a new stack layout.
--- @function wibox.layout.stack
+-- @function atomi.proton.layout.stack
 -- @treturn widget A new stack layout
 
 local function new(...)
@@ -248,7 +248,7 @@ end
 
 --- When a mouse button is pressed over the widget.
 -- The position of the mouse press relative to the widget while geometry
--- contains the geometry of the widget relative to the wibox.
+-- contains the geometry of the widget relative to the atomi.proton.
 -- @signal button::press
 -- @tparam table widget The widget
 -- @tparam number lx The relative horizontal position.
@@ -267,7 +267,7 @@ end
 
 --- When a mouse button is released over the widget.
 -- The position of the mouse press relative to the widget while geometry
--- contains the geometry of the widget relative to the wibox.
+-- contains the geometry of the widget relative to the atomi.proton.
 -- @signal button::release
 -- @tparam table widget The widget
 -- @tparam number lx The relative horizontal position.

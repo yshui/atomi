@@ -7,14 +7,14 @@
 -- @author dodo
 -- @copyright 2012 dodo
 -- @release v3.5.2-1890-ge472339
--- @classmod wibox.container.mirror
+-- @classmod atomi.proton.container.mirror
 ---------------------------------------------------------------------------
 
 local type = type
 local error = error
 local ipairs = ipairs
 local setmetatable = setmetatable
-local base = require("wibox.widget.base")
+local base = require("atomi.proton.widget.base")
 local matrix = require("gears.matrix")
 local util = require("atomi.util")
 
@@ -116,7 +116,7 @@ end
 -- @param[opt] widget The widget to display.
 -- @param[opt] reflection A table describing the reflection to apply.
 -- @treturn table A new mirror container
--- @function wibox.container.mirror
+-- @function atomi.proton.container.mirror
 local function new(widget, reflection)
     local ret = base.make_widget(nil, nil, {enable_properties = true})
     ret._private.horizontal = false
@@ -193,7 +193,7 @@ end
 
 --- When a mouse button is pressed over the widget.
 -- The position of the mouse press relative to the widget while geometry
--- contains the geometry of the widget relative to the wibox.
+-- contains the geometry of the widget relative to the atomi.proton.
 -- @signal button::press
 -- @tparam table widget The widget
 -- @tparam number lx The relative horizontal position.
@@ -212,7 +212,7 @@ end
 
 --- When a mouse button is released over the widget.
 -- The position of the mouse press relative to the widget while geometry
--- contains the geometry of the widget relative to the wibox.
+-- contains the geometry of the widget relative to the atomi.proton.
 -- @signal button::release
 -- @tparam table widget The widget
 -- @tparam number lx The relative horizontal position.

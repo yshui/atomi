@@ -40,10 +40,11 @@ local function should_display_on(s)
 end
 
 function systray:draw(context, cr, width, height)
+    print("Redraw 0")
     if not should_display_on(context.screen) then
         return
     end
-    print("Redraw")
+    print("Redraw 1")
     print(debug.traceback())
 
     local x, y, _, _ = wbase.rect_to_device_geometry(cr, 0, 0, width, height)
@@ -76,11 +77,15 @@ function systray:draw(context, cr, width, height)
 end
 
 function systray:fit(context, width, height)
+    print("systray::fit")
+    print(debug.traceback())
     if not should_display_on(context.screen) then
         return 0, 0
     end
 
     local num_entries = capi.awesome.systray()
+
+    print("nent "..num_entries)
     local base = base_size
     local spacing = ugly.systray_icon_spacing or 0
     if num_entries == 0 then

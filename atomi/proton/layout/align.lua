@@ -22,7 +22,7 @@ local pairs = pairs
 local type = type
 local floor = math.floor
 local util = require("atomi.util")
-local base = require("wibox.widget.base")
+local base = require("atomi.proton.widget.base")
 
 local align = {}
 

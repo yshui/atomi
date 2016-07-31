@@ -547,27 +547,21 @@ function client.getmarked()
     return copy
 end
 
---- Set a client floating state, overriding auto-detection.
--- Floating client are not handled by tiling layouts.
--- @deprecated atomi.client.floating.set
--- @client c A client.
--- @param s True or false.
-function client.floating.set(c, s)
-    util.deprecate("Use c.floating = true instead of atomi.client.floating.set")
-    client.object.set_floating(c, s)
-end
-
 -- Set a client floating state, overriding auto-detection.
 -- Floating client are not handled by tiling layouts.
 -- @client c A client.
 -- @param s True or false.
 function client.object.set_floating(c, s)
+    print(c.name..".floating = "..tostring(s))
     c = c or capi.client.focus
     if c and client.property.get(c, "floating") ~= s then
         client.property.set(c, "floating", s)
         local scr = c.screen
         if s == true then
             c:geometry(client.property.get(c, "floating_geometry"))
+            c.ontop = true
+        else
+            c.ontop = false
         end
         c.screen = scr
     end
@@ -628,18 +622,6 @@ function client.object.is_fixed(c)
     return false
 end
 
---- Get a client floating state.
--- @client c A client.
--- @see floating
--- @deprecated atomi.client.floating.get
--- @return True or false. Note that some windows might be floating even if you
--- did not set them manually. For example, windows with a type different than
--- normal.
-function client.floating.get(c)
-    util.deprecate("Use c.floating instead of atomi.client.floating.get")
-    return client.object.get_floating(c)
-end
-
 --- The client floating state.
 -- If the client is part of the tiled layout or free floating.
 --
@@ -666,6 +648,7 @@ function client.object.get_floating(c)
             or c.maximized_vertical
             or c.maximized_horizontal
             or client.object.is_fixed(c) then
+            client.object.set_floating(c, true)
             return true
         end
         return false
@@ -1005,6 +988,7 @@ end
 -- @param value The value.
 -- @deprecated atomi.client.property.set
 function client.property.set(c, prop, value)
+    print("property.set "..tostring(c.name)..", "..prop.." = "..tostring(value))
     if not client.data.properties[c] then
         client.data.properties[c] = {}
     end

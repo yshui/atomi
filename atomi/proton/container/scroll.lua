@@ -2,13 +2,13 @@
 -- @author Uli Schlachter (based on ideas from Saleur Geoffrey)
 -- @copyright 2015 Uli Schlachter
 -- @release v3.5.2-1890-ge472339
--- @classmod wibox.container.scroll
+-- @classmod atomi.proton.container.scroll
 ---------------------------------------------------------------------------
 
 local cache = require("gears.cache")
 local timer = require("gears.timer")
-local hierarchy = require("wibox.hierarchy")
-local base = require("wibox.widget.base")
+local hierarchy = require("atomi.proton.hierarchy")
+local base = require("atomi.proton.widget.base")
 local lgi = require("lgi")
 local GLib = lgi.GLib
 
@@ -72,7 +72,7 @@ end)
 -- @field first_y The y offset for drawing the child the first time
 -- @field[opt] second_x The x offset for drawing the child the second time
 -- @field[opt] second_y The y offset for drawing the child the second time
--- @field hierarchy The wibox.hierarchy instance representing "everything"
+-- @field hierarchy The atomi.proton.hierarchy instance representing "everything"
 -- @field context The widget context for drawing the hierarchy
 local function calculate_info(self, context, width, height)
     local result = {}
@@ -569,7 +569,7 @@ end
 
 --- When a mouse button is pressed over the widget.
 -- The position of the mouse press relative to the widget while geometry
--- contains the geometry of the widget relative to the wibox.
+-- contains the geometry of the widget relative to the atomi.proton.
 -- @signal button::press
 -- @tparam table widget The widget
 -- @tparam number lx The relative horizontal position.
@@ -588,7 +588,7 @@ end
 
 --- When a mouse button is released over the widget.
 -- The position of the mouse press relative to the widget while geometry
--- contains the geometry of the widget relative to the wibox.
+-- contains the geometry of the widget relative to the atomi.proton.
 -- @signal button::release
 -- @tparam table widget The widget
 -- @tparam number lx The relative horizontal position.

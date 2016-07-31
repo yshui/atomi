@@ -6,19 +6,14 @@
 -- @release v3.5.2-1890-ge472339
 -- @classmod wibox.layout
 ---------------------------------------------------------------------------
-local base = require("wibox.widget.base")
+local base = require("atomi.proton.widget.base")
 
 return setmetatable({
-    fixed = require("wibox.layout.fixed");
-    align = require("wibox.layout.align");
-    flex = require("wibox.layout.flex");
-    rotate = require("wibox.layout.rotate");
-    margin = require("wibox.layout.margin");
-    mirror = require("wibox.layout.mirror");
-    constraint = require("wibox.layout.constraint");
-    scroll = require("wibox.layout.scroll");
-    ratio = require("wibox.layout.ratio");
-    stack = require("wibox.layout.stack");
+    fixed = require("atomi.proton.layout.fixed");
+    align = require("atomi.proton.layout.align");
+    flex = require("atomi.proton.layout.flex");
+    ratio = require("atomi.proton.layout.ratio");
+    stack = require("atomi.proton.layout.stack");
 }, {__call = function(_, args) return base.make_widget_declarative(args) end})
 
 -- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80

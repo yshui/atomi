@@ -8,14 +8,14 @@
 -- @author Uli Schlachter
 -- @copyright 2010 Uli Schlachter
 -- @release v3.5.2-1890-ge472339
--- @classmod wibox.container.rotate
+-- @classmod atomi.proton.container.rotate
 ---------------------------------------------------------------------------
 
 local error = error
 local pi = math.pi
 local setmetatable = setmetatable
 local tostring = tostring
-local base = require("wibox.widget.base")
+local base = require("atomi.proton.widget.base")
 local matrix = require("gears.matrix")
 local util = require("atomi.util")
 
@@ -156,7 +156,7 @@ end
 
 --- When a mouse button is pressed over the widget.
 -- The position of the mouse press relative to the widget while geometry
--- contains the geometry of the widget relative to the wibox.
+-- contains the geometry of the widget relative to the atomi.proton.
 -- @signal button::press
 -- @tparam table widget The widget
 -- @tparam number lx The relative horizontal position.
@@ -175,7 +175,7 @@ end
 
 --- When a mouse button is released over the widget.
 -- The position of the mouse press relative to the widget while geometry
--- contains the geometry of the widget relative to the wibox.
+-- contains the geometry of the widget relative to the atomi.proton.
 -- @signal button::release
 -- @tparam table widget The widget
 -- @tparam number lx The relative horizontal position.
@@ -266,32 +266,32 @@ end
 -- @usage
 --local normal = create_arrow('Normal')
 -- 
---local north  = wibox.container {
+--local north  = atomi.proton.container {
 --    create_arrow('North'),
 -- 
 --    direction = 'north',
---    widget    = wibox.container.rotate
+--    widget    = atomi.proton.container.rotate
 --}
 -- 
---local south  = wibox.container {
+--local south  = atomi.proton.container {
 --    create_arrow('South'),
 -- 
 --    direction = 'south',
---    widget    = wibox.container.rotate
+--    widget    = atomi.proton.container.rotate
 --}
 -- 
---local east  = wibox.container {
+--local east  = atomi.proton.container {
 --    create_arrow('East'),
 -- 
 --    direction = 'east',
---    widget    = wibox.container.rotate
+--    widget    = atomi.proton.container.rotate
 --}
 -- 
---local west  = wibox.container {
+--local west  = atomi.proton.container {
 --    create_arrow('West'),
 -- 
 --    direction = 'west',
---    widget    = wibox.container.rotate
+--    widget    = atomi.proton.container.rotate
 --}
 -- @property direction
 -- @tparam string dir The direction
@@ -324,7 +324,7 @@ end
 -- @param[opt] widget The widget to display.
 -- @param[opt] dir The direction to rotate to.
 -- @treturn table A new rotate container.
--- @function wibox.container.rotate
+-- @function atomi.proton.container.rotate
 local function new(widget, dir)
     local ret = base.make_widget(nil, nil, {enable_properties = true})
 

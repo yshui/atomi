@@ -50,6 +50,7 @@ local function do_redraw(self)
     if self._need_relayout or self._need_complete_repaint then
         self._need_relayout = false
         if self._widget_hierarchy and self.widget then
+            print("call hier::update",width,height)
             self._widget_hierarchy:update(context,
                 self.widget, width, height, self._dirty_area)
         else
@@ -370,6 +371,7 @@ function drawable.new(d, args, drawable_name)
         if ret._widget_hierarchy_callback_arg ~= arg then
             return
         end
+        print("drawable redraw cb 2")
         local m = hierar:get_matrix_to_device()
         local x, y, width, height = matrix.transform_rectangle(m, hierar:get_draw_extents())
         local x1, y1 = math.floor(x), math.floor(y)

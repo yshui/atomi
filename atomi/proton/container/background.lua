@@ -9,10 +9,10 @@
 -- @author Uli Schlachter
 -- @copyright 2010 Uli Schlachter
 -- @release v3.5.2-1890-ge472339
--- @classmod wibox.container.background
+-- @classmod atomi.proton.container.background
 ---------------------------------------------------------------------------
 
-local base = require("wibox.widget.base")
+local base = require("atomi.proton.widget.base")
 local color = require("gears.color")
 local surface = require("gears.surface")
 local cairo = require("lgi").cairo
@@ -140,27 +140,27 @@ end
 -- @usage
 --local text_widget = {
 --    text   = 'Hello world!',
---    widget = wibox.widget.textbox
+--    widget = atomi.proton.widget.textbox
 --}
 -- 
 --parent : setup {
 --    {
 --        text_widget,
 --        bg     = '#ff0000',
---        widget = wibox.container.background
+--        widget = atomi.proton.container.background
 --    },
 --    {
 --        text_widget,
 --        bg     = '#00ff00',
---        widget = wibox.container.background
+--        widget = atomi.proton.container.background
 --    },
 --    {
 --        text_widget,
 --        bg     = '#0000ff',
---        widget = wibox.container.background
+--        widget = atomi.proton.container.background
 --    },
 --    spacing = 10,
---    layout  = wibox.layout.fixed.vertical
+--    layout  = atomi.proton.layout.fixed.vertical
 --}
 -- @property bg
 -- @param bg A color string, pattern or gradient
@@ -187,27 +187,27 @@ end
 -- @usage
 --local text_widget = {
 --    text   = 'Hello world!',
---    widget = wibox.widget.textbox
+--    widget = atomi.proton.widget.textbox
 --}
 -- 
 --parent : setup {
 --    {
 --        text_widget,
 --        fg     = '#ff0000',
---        widget = wibox.container.background
+--        widget = atomi.proton.container.background
 --    },
 --    {
 --        text_widget,
 --        fg     = '#00ff00',
---        widget = wibox.container.background
+--        widget = atomi.proton.container.background
 --    },
 --    {
 --        text_widget,
 --        fg     = '#0000ff',
---        widget = wibox.container.background
+--        widget = atomi.proton.container.background
 --    },
 --    spacing = 10,
---    layout  = wibox.layout.fixed.vertical
+--    layout  = atomi.proton.layout.fixed.vertical
 --}
 -- @property fg
 -- @param fg A color string, pattern or gradient
@@ -240,35 +240,35 @@ end
 --        -- Adding a shape without margin may result in cropped output
 --        {
 --            text   = 'Hello world!',
---            widget = wibox.widget.textbox
+--            widget = atomi.proton.widget.textbox
 --        },
 --        shape              = gears.shape.hexagon,
 --        bg                 = beautiful.bg_normal,
 --        shape_border_color = beautiful.border_color,
 --        shape_border_width = beautiful.border_width,
---        widget             = wibox.container.background
+--        widget             = atomi.proton.container.background
 --    },
 --    {
 --        -- To solve this, use a margin
 --        {
 --            {
 --                text   = 'Hello world!',
---                widget = wibox.widget.textbox
+--                widget = atomi.proton.widget.textbox
 --            },
 --            left   = 10,
 --            right  = 10,
 --            top    = 3,
 --            bottom = 3,
---            widget = wibox.container.margin
+--            widget = atomi.proton.container.margin
 --        },
 --        shape              = gears.shape.hexagon,
 --        bg                 = beautiful.bg_normal,
 --        shape_border_color = beautiful.border_color,
 --        shape_border_width = beautiful.border_width,
---        widget             = wibox.container.background
+--        widget             = atomi.proton.container.background
 --    },
 --    spacing = 10,
---    layout  = wibox.layout.fixed.vertical
+--    layout  = atomi.proton.layout.fixed.vertical
 --}
 -- @property shape
 -- @param shape A function taking a context, width and height as arguments
@@ -293,7 +293,7 @@ end
 
 --- When a `shape` is set, also draw a border.
 --
--- See `wibox.container.background.shape` for an usage example.
+-- See `atomi.proton.container.background.shape` for an usage example.
 -- @property shape_border_width
 -- @tparam number width The border width
 
@@ -308,7 +308,7 @@ end
 
 --- When a `shape` is set, also draw a border.
 --
--- See `wibox.container.background.shape` for an usage example.
+-- See `atomi.proton.container.background.shape` for an usage example.
 -- @property shape_border_color
 -- @param[opt=self._private.foreground] fg The border color, pattern or gradient
 -- @see gears.color
@@ -333,27 +333,27 @@ end
 --        -- Some content may be outside of the shape
 --        {
 --            text   = 'Hello\nworld!',
---            widget = wibox.widget.textbox
+--            widget = atomi.proton.widget.textbox
 --        },
 --        shape              = gears.shape.circle,
 --        bg                 = beautiful.bg_normal,
 --        shape_border_color = beautiful.border_color,
---        widget             = wibox.container.background
+--        widget             = atomi.proton.container.background
 --    },
 --    {
 --        -- To solve this, clip the content
 --        {
 --            text   = 'Hello\nworld!',
---            widget = wibox.widget.textbox
+--            widget = atomi.proton.widget.textbox
 --        },
 --        shape_clip         = true,
 --        shape              = gears.shape.circle,
 --        bg                 = beautiful.bg_normal,
 --        shape_border_color = beautiful.border_color,
---        widget             = wibox.container.background
+--        widget             = atomi.proton.container.background
 --    },
 --    spacing = 10,
---    layout  = wibox.layout.fixed.vertical
+--    layout  = atomi.proton.layout.fixed.vertical
 --}
 -- @property shape_clip
 -- @tparam boolean value If the shape clip is enable
@@ -391,7 +391,7 @@ end
 -- @param[opt] widget The widget to display.
 -- @param[opt] bg The background to use for that widget.
 -- @param[opt] shape A `gears.shape` compatible shape function
--- @function wibox.container.background
+-- @function atomi.proton.container.background
 local function new(widget, bg, shape)
     local ret = base.make_widget(nil, nil, {
         enable_properties = true,
@@ -470,7 +470,7 @@ end
 
 --- When a mouse button is pressed over the widget.
 -- The position of the mouse press relative to the widget while geometry
--- contains the geometry of the widget relative to the wibox.
+-- contains the geometry of the widget relative to the atomi.proton.
 -- @signal button::press
 -- @tparam table widget The widget
 -- @tparam number lx The relative horizontal position.
@@ -489,7 +489,7 @@ end
 
 --- When a mouse button is released over the widget.
 -- The position of the mouse press relative to the widget while geometry
--- contains the geometry of the widget relative to the wibox.
+-- contains the geometry of the widget relative to the atomi.proton.
 -- @signal button::release
 -- @tparam table widget The widget
 -- @tparam number lx The relative horizontal position.
