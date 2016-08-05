@@ -25,6 +25,9 @@ local function check_focus(obj)
         if c then
             c:emit_signal("request::activate", "autofocus.check_focus",
                           {raise=false})
+            if c.minimized then
+                c.minimized = false
+            end
         end
     end
 end

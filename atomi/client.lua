@@ -126,6 +126,39 @@ function client.visible(s, stacked)
     return vcls
 end
 
+-- Check whether the given client has any of the tags
+--
+-- @tparam table The tags
+-- @treturn boolean Whether the client has any of the tags
+function client.has_tags_any(c, tags)
+    for _, t in ipairs(c:tags()) do
+        for _, tt in ipairs(tags) do
+            if t == tt then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+--- Get clients on selected tags of a screen.
+--
+-- @see screen.clients
+-- @tparam[opt] integer|screen s The screen, or nil for all screens.
+-- @tparam[opt=false] boolean stacked Use stacking order? (top to bottom)
+-- @treturn table A table with all visible clients.
+function client.on_selected_tags(s, stacked)
+    local cls = capi.client.get(s, stacked)
+    local stags = s.selected_tags
+    local vcls = {}
+    for _, c in pairs(cls) do
+        if client.has_tags_any(c, stags) then
+            table.insert(vcls, c)
+        end
+    end
+    return vcls
+end
+
 --- Get visible and tiled clients
 --
 -- @deprecated atomi.client.tiled

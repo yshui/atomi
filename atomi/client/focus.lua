@@ -111,7 +111,7 @@ function focus.history.get(s, idx, filter)
     s = get_screen(s)
     -- When this counter is equal to idx, we return the client
     local counter = 0
-    local vc = client.visible(s, true)
+    local vc = client.on_selected_tags(s, true)
     for _, c in ipairs(focus.history.list) do
         if get_screen(c.screen) == s then
             if not filter or filter(c) then
