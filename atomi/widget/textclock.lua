@@ -4,7 +4,7 @@
 -- @author Julien Danjou &lt;julien@danjou.info&gt;
 -- @copyright 2009 Julien Danjou
 -- @release v3.5.2-1890-ge472339
--- @classmod wibox.widget.textclock
+-- @classmod atomi.proton.widget.textclock
 ---------------------------------------------------------------------------
 
 local setmetatable = setmetatable
@@ -27,7 +27,7 @@ end
 -- @tparam[opt=" %a %b %d, %H:%M "] string format The time format.
 -- @tparam[opt=60] number timeout How often update the time (in seconds).
 -- @treturn table A textbox widget.
--- @function wibox.widget.textclock
+-- @function atomi.proton.widget.textclock
 function textclock.new(s, format, timeout)
     format = format or " %a %b %d, %H:%M "
     timeout = timeout or 60

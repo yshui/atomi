@@ -8,7 +8,7 @@
 ---------------------------------------------------------------------------
 
 -- Grab environment we need
-local surface = require("gears.surface")
+local surface = require("atomi.proton.surface")
 local cairo = require("lgi").cairo
 local capi =
 {

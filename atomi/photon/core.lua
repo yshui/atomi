@@ -21,7 +21,7 @@ local screen = require("atomi.screen")
 local util = require("atomi.util")
 local ugly = require("ugly")
 local proton = require("atomi.proton")
-local surface = require("gears.surface")
+local surface = require("atomi.proton.surface")
 local cairo = require("lgi").cairo
 local dpi = require("ugly").x.apply_dpi
 

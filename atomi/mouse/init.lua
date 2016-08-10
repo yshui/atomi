@@ -58,26 +58,12 @@ mouse.wibox = {}
 -- @beautiful beautiful.snap_shape
 -- @tparam function shape A `gears.shape` compatible function
 
---- Get the client object under the pointer.
--- @deprecated atomi.mouse.client_under_pointer
--- @return The client object under the pointer, if one can be found.
--- @see current_client
-function mouse.client_under_pointer()
-    util.deprecated("Use mouse.current_client instead of atomi.mouse.client_under_pointer()")
-
-    return mouse.object.get_current_client()
-end
-
 --- Move a client.
 -- @function atomi.mouse.client.move
 -- @param c The client to move, or the focused one if nil.
 -- @param snap The pixel to snap clients.
 -- @param finished_cb Deprecated, do not use
-function mouse.client.move(c, snap, finished_cb) --luacheck: no unused args
-    if finished_cb then
-        util.deprecated("The mouse.client.move `finished_cb` argument is no longer"..
-            " used, please use atomi.mouse.resize.add_leave_callback(f, 'mouse.move')")
-    end
+function mouse.client.move(c, snap) --luacheck: no unused args
 
     c = c or capi.client.focus
 
@@ -107,19 +93,6 @@ end
 
 mouse.client.dragtotag = { }
 
---- Move a client to a tag by dragging it onto the left / right side of the screen.
--- @deprecated atomi.mouse.client.dragtotag.border
--- @param c The client to move
-function mouse.client.dragtotag.border(c)
-    util.deprecated("Use atomi.mouse.snap.drag_to_tag_enabled = true instead "..
-        "of atomi.mouse.client.dragtotag.border(c). It will now be enabled.")
-
-    -- Enable drag to border
-    mouse.snap.drag_to_tag_enabled = true
-
-    return mouse.client.move(c)
-end
-
 --- Move the wibox under the cursor.
 -- @function atomi.mouse.wibox.move
 --@tparam wibox w The wibox to move, or none to use that under the pointer
@@ -147,35 +120,6 @@ function mouse.wibox.move(w)
         placement = aplace.under_mouse,
         offset    = offset
     })
-end
-
---- Get a client corner coordinates.
--- @deprecated atomi.mouse.client.corner
--- @tparam[opt=client.focus] client c The client to get corner from, focused one by default.
--- @tparam string corner The corner to use: auto, top_left, top_right, bottom_left,
--- bottom_right, left, right, top bottom. Default is auto, and auto find the
--- nearest corner.
--- @treturn string The corner name
--- @treturn number x The horizontal position
--- @treturn number y The vertical position
-function mouse.client.corner(c, corner)
-    util.deprecated(
-        "Use atomi.placement.closest_corner(mouse) or atomi.placement[corner](mouse)"..
-        " instead of atomi.mouse.client.corner"
-    )
-
-    c = c or capi.client.focus
-    if not c then return end
-
-    local ngeo = nil
-
-    if (not corner) or corner == "auto" then
-        ngeo, corner = aplace.closest_corner(mouse, {parent = c})
-    elseif corner and aplace[corner] then
-        ngeo = aplace[corner](mouse, {parent = c})
-    end
-
-    return corner, ngeo and ngeo.x or nil, ngeo and ngeo.y or nil
 end
 
 --- Resize a client.

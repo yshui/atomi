@@ -7,9 +7,9 @@
 
 local setmetatable = setmetatable
 local abutton = require("atomi.button")
-local imagebox = require("wibox.widget.imagebox")
-local widget = require("wibox.widget.base")
-local surface = require("gears.surface")
+local imagebox = require("atomi.proton.widget.imagebox")
+local widget = require("atomi.proton.widget.base")
+local surface = require("atomi.proton.surface")
 local cairo = require("lgi").cairo
 
 local button = { mt = {} }

@@ -2,15 +2,15 @@
 -- @author Aleksey Fedotov &lt;lexa@cfotr.com&gt;
 -- @copyright 2015 Aleksey Fedotov
 -- @release v3.5.2-1890-ge472339
--- @classmod wibox.widget.keyboardlayout
+-- @classmod atomi.proton.widget.keyboardlayout
 ---------------------------------------------------------------------------
 
 local capi = {awesome = awesome}
 local setmetatable = setmetatable
-local textbox = require("wibox.widget.textbox")
+local textbox = require("atomi.proton.widget.textbox")
 local button = require("atomi.button")
 local util = require("atomi.util")
-local widget_base = require("wibox.widget.base")
+local widget_base = require("atomi.proton.widget.base")
 
 --- Keyboard Layout widget.
 -- atomi.widget.keyboardlayout

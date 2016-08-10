@@ -574,22 +574,22 @@ end
 
 --- The background of the wibar.
 -- @param c The background to use. This must either be a cairo pattern object,
---   nil or a string that gears.color() understands.
+--   nil or a string that atomi.proton.pattern() understands.
 -- @property bg
--- @see gears.color
+-- @see atomi.proton.pattern
 
 --- The background image of the drawable.
 -- If `image` is a function, it will be called with `(context, cr, width, height)`
 -- as arguments. Any other arguments passed to this method will be appended.
 -- @param image A background image or a function
 -- @property bgimage
--- @see gears.surface
+-- @see atomi.proton.surface
 
 --- The foreground (text) of the wibar.
 -- @param c The foreground to use. This must either be a cairo pattern object,
---   nil or a string that gears.color() understands.
+--   nil or a string that atomi.proton.pattern() understands.
 -- @property fg
--- @see gears.color
+-- @see atomi.proton.pattern
 
 --- Find a widget by a point.
 -- The wibar must have drawn itself at least once for this to work.

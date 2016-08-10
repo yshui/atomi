@@ -5,19 +5,19 @@
 --![Usage example](../images/AUTOGEN_wibox_widget_defaults_imagebox.svg)
 --
 -- @usage
---wibox.widget {
+--atomi.proton.widget {
 --    image  = beautiful.awesome_icon,
 --    resize = false,
---    widget = wibox.widget.imagebox
+--    widget = atomi.proton.widget.imagebox
 --}
 -- @author Uli Schlachter
 -- @copyright 2010 Uli Schlachter
 -- @release v3.5.2-1890-ge472339
--- @classmod wibox.widget.imagebox
+-- @classmod atomi.proton.widget.imagebox
 ---------------------------------------------------------------------------
 
-local base = require("wibox.widget.base")
-local surface = require("gears.surface")
+local base = require("atomi.proton.widget.base")
+local surface = require("atomi.proton.surface")
 local util = require("atomi.util")
 local setmetatable = setmetatable
 local type = type
@@ -166,7 +166,7 @@ end
 --   to fit into the available space.
 -- @param clip_shape A `gears.shape` compatible function
 -- @treturn table A new `imagebox`
--- @function wibox.widget.imagebox
+-- @function atomi.proton.widget.imagebox
 local function new(image, resize_allowed, clip_shape)
     local ret = base.make_widget(nil, nil, {enable_properties = true})
 

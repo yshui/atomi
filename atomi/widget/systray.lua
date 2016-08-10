@@ -40,12 +40,9 @@ local function should_display_on(s)
 end
 
 function systray:draw(context, cr, width, height)
-    print("Redraw 0")
     if not should_display_on(context.screen) then
         return
     end
-    print("Redraw 1")
-    print(debug.traceback())
 
     local x, y, _, _ = wbase.rect_to_device_geometry(cr, 0, 0, width, height)
     local num_entries = capi.awesome.systray()
@@ -77,15 +74,11 @@ function systray:draw(context, cr, width, height)
 end
 
 function systray:fit(context, width, height)
-    print("systray::fit")
-    print(debug.traceback())
     if not should_display_on(context.screen) then
         return 0, 0
     end
 
     local num_entries = capi.awesome.systray()
-
-    print("nent "..num_entries)
     local base = base_size
     local spacing = ugly.systray_icon_spacing or 0
     if num_entries == 0 then
@@ -161,7 +154,6 @@ end
 -- @function proton.widget.systray
 
 local function new(revers)
-    print("New systray")
     local ret = wbase.make_widget()
 
     util.table.crush(ret, systray, true)
@@ -171,12 +163,10 @@ local function new(revers)
     end
 
     capi.awesome.connect_signal("systray::update", function()
-        print("systray::update")
         ret:emit_signal("widget::layout_changed")
         ret:emit_signal("widget::redraw_needed")
     end)
     capi.screen.connect_signal("primary_changed", function()
-        print("primary_changed")
         if display_on_screen == "primary" then
             ret:emit_signal("widget::layout_changed")
         end

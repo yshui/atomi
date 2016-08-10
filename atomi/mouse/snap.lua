@@ -10,9 +10,8 @@
 local aclient   = require("atomi.client")
 local resize    = require("atomi.mouse.resize")
 local aplace    = require("atomi.placement")
-local wibox     = require("wibox")
-local beautiful = require("beautiful")
-local color     = require("gears.color")
+local ugly      = require("ugly")
+local color     = require("atomi.proton.pattern")
 local shape     = require("gears.shape")
 local cairo     = require("lgi").cairo
 

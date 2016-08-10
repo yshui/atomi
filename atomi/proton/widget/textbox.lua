@@ -71,7 +71,6 @@ end
 
 -- Fit the given textbox
 function textbox:fit(context, width, height)
-    print("tb::fit")
     setup_layout(self, width, height, context.dpi)
     return do_fit_return(self)
 end

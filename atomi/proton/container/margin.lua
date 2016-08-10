@@ -13,7 +13,7 @@
 local pairs = pairs
 local setmetatable = setmetatable
 local base = require("atomi.proton.widget.base")
-local gcolor = require("gears.color")
+local gcolor = require("atomi.proton.pattern")
 local cairo = require("lgi").cairo
 local util = require("atomi.util")
 

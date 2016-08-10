@@ -14,10 +14,10 @@ local abutton = require("atomi.button")
 local aclient = require("atomi.client")
 local atooltip = require("atomi.tooltip")
 local beautiful = require("beautiful")
-local drawable = require("wibox.drawable")
-local imagebox = require("wibox.widget.imagebox")
-local textbox = require("wibox.widget.textbox")
-local base = require("wibox.widget.base")
+local drawable = require("atomi.proton.drawable")
+local imagebox = require("atomi.proton.widget.imagebox")
+local textbox = require("atomi.proton.widget.textbox")
+local base = require("atomi.proton.widget.base")
 local capi = {
     client = client
 }

@@ -9,7 +9,7 @@
 -- @module atomi.menu
 --------------------------------------------------------------------------------
 
-local wibox = require("wibox")
+local proton = require("atomi.proton")
 local button = require("atomi.button")
 local util = require("atomi.util")
 local spawn = require("atomi.spawn")
@@ -19,7 +19,7 @@ local client_iterate = require("atomi.client").iterate
 local beautiful = require("beautiful")
 local dpi = require("beautiful").xresources.apply_dpi
 local object = require("gears.object")
-local surface = require("gears.surface")
+local surface = require("atomi.proton.surface")
 local protected_call = require("gears.protected_call")
 local cairo = require("lgi").cairo
 local setmetatable = setmetatable
@@ -125,11 +125,11 @@ local function set_coords(_menu, s, m_coords)
     local screen_w = s_geometry.x + s_geometry.width
     local screen_h = s_geometry.y + s_geometry.height
 
-    _menu.width = _menu.wibox.width
-    _menu.height = _menu.wibox.height
+    _menu.width = _menu.proton.width
+    _menu.height = _menu.proton.height
 
-    _menu.x = _menu.wibox.x
-    _menu.y = _menu.wibox.y
+    _menu.x = _menu.proton.x
+    _menu.y = _menu.proton.y
 
     if _menu.parent then
         local w, h = item_position(_menu.parent, _menu)
@@ -154,8 +154,8 @@ local function set_coords(_menu, s, m_coords)
                  screen_w - _menu.width  or _menu.x
     end
 
-    _menu.wibox.x = _menu.x
-    _menu.wibox.y = _menu.y
+    _menu.proton.x = _menu.x
+    _menu.proton.y = _menu.y
 end
 
 
@@ -169,8 +169,8 @@ local function set_size(_menu)
     end
     _menu[a], _menu[b] = in_dir, other
     if in_dir > 0 and other > 0 then
-        _menu.wibox[a] = in_dir
-        _menu.wibox[b] = other
+        _menu.proton[a] = in_dir
+        _menu.proton[b] = other
         return true
     end
     return false
@@ -235,7 +235,7 @@ function menu:exec(num, opts)
             action and type(action) == "function" and
             (not opts.mouse or (opts.mouse and (self.auto_expand or
             (self.active_child == self.child[num] and
-            self.active_child.wibox.visible))))
+            self.active_child.proton.visible))))
         if can_invoke_action then
             local visible = action(self.child[num], item)
             if not visible then
@@ -249,7 +249,7 @@ function menu:exec(num, opts)
             self.active_child:hide()
         end
         self.active_child = self.child[num]
-        if not self.active_child.wibox.visible then
+        if not self.active_child.proton.visible then
             self.active_child:show()
         end
     elseif type(cmd) == "string" then
@@ -319,7 +319,7 @@ function menu:show(args)
     set_coords(self, s, coords)
 
     keygrabber.run(self._keygrabber)
-    self.wibox.visible = true
+    self.proton.visible = true
 end
 
 --- Hide a menu popup.
@@ -335,14 +335,14 @@ function menu:hide()
     self.sel = nil
 
     keygrabber.stop(self._keygrabber)
-    self.wibox.visible = false
+    self.proton.visible = false
 end
 
 --- Toggle menu visibility.
 -- @param args The arguments
 -- @param args.coords Menu position {x,y}
 function menu:toggle(args)
-    if self.wibox.visible then
+    if self.proton.visible then
         self:hide()
     else
         self:show(args)
@@ -351,7 +351,7 @@ end
 
 --- Update menu content
 function menu:update()
-    if self.wibox.visible then
+    if self.proton.visible then
         self:show({ coords = { x = self.x, y = self.y } })
     end
 end
@@ -383,8 +383,8 @@ function menu:add(args, index)
     item.theme = item.theme or theme
     item.width = item.width or theme.width
     item.height = item.height or theme.height
-    wibox.widget.base.check_widget(item.widget)
-    item._background = wibox.container.background()
+    proton.widget.base.check_widget(item.widget)
+    item._background = proton.container.background()
     item._background:set_widget(item.widget)
     item._background:set_fg(item.theme.fg_normal)
     item._background:set_bg(item.theme.bg_normal)
@@ -416,7 +416,7 @@ function menu:add(args, index)
         table.insert(self.items, item)
         self.layout:add(item._background)
     end
-    if self.wibox then
+    if self.proton then
         set_size(self)
     end
     return item
@@ -448,7 +448,7 @@ function menu:delete(num)
         end
         table.remove(self.child, num)
     end
-    if self.wibox then
+    if self.proton then
         set_size(self)
     end
 end
@@ -505,7 +505,7 @@ function menu.entry(parent, args) -- luacheck: no unused args
     args.icon = args[3] or args.icon
     local ret = {}
     -- Create the item label widget
-    local label = wibox.widget.textbox()
+    local label = proton.widget.textbox()
     local key = ''
     label:set_font(args.theme.font)
     label:set_markup(string.gsub(
@@ -516,7 +516,7 @@ function menu.entry(parent, args) -- luacheck: no unused args
         end, 1))
     -- Set icon if needed
     local icon, iconbox
-    local margin = wibox.container.margin()
+    local margin = proton.container.margin()
     margin:set_widget(label)
     if args.icon then
         icon = surface.load(args.icon)
@@ -539,7 +539,7 @@ function menu.entry(parent, args) -- luacheck: no unused args
             cr:paint()
             icon = img
         end
-        iconbox = wibox.widget.imagebox()
+        iconbox = proton.widget.imagebox()
         if iconbox:set_image(icon) then
             margin:set_left(dpi(2))
         else
@@ -553,23 +553,23 @@ function menu.entry(parent, args) -- luacheck: no unused args
     local submenu
     if type(args.cmd) == "table" then
         if args.theme.submenu_icon then
-            submenu = wibox.widget.imagebox()
+            submenu = proton.widget.imagebox()
             submenu:set_image(args.theme.submenu_icon)
         else
-            submenu = wibox.widget.textbox()
+            submenu = proton.widget.textbox()
             submenu:set_font(args.theme.font)
             submenu:set_text(args.theme.submenu)
         end
     end
-    -- Add widgets to the wibox
-    local left = wibox.layout.fixed.horizontal()
+    -- Add widgets to the proton
+    local left = proton.layout.fixed.horizontal()
     if iconbox then
         left:add(iconbox)
     end
     -- This contains the label
     left:add(margin)
 
-    local layout = wibox.layout.align.horizontal()
+    local layout = proton.layout.align.horizontal()
     layout:set_left(left)
     if submenu then
         layout:set_right(submenu)
@@ -620,7 +620,7 @@ end
 -- end
 function menu.new(args, parent)
     args = args or {}
-    args.layout = args.layout or wibox.layout.flex.vertical
+    args.layout = args.layout or proton.layout.flex.vertical
     local _menu = table_update(object(), {
         item_enter = menu.item_enter,
         item_leave = menu.item_leave,
@@ -656,19 +656,19 @@ function menu.new(args, parent)
         grabber(_menu, ...)
     end
 
-    _menu.wibox = wibox({
+    _menu.proton = proton({
         ontop = true,
         fg = _menu.theme.fg_normal,
         bg = _menu.theme.bg_normal,
         border_color = _menu.theme.border,
         border_width = _menu.theme.border_width,
         type = "popup_menu" })
-    _menu.wibox.visible = false
-    _menu.wibox:set_widget(_menu.layout)
+    _menu.proton.visible = false
+    _menu.proton:set_widget(_menu.layout)
     set_size(_menu)
 
-    _menu.x = _menu.wibox.x
-    _menu.y = _menu.wibox.y
+    _menu.x = _menu.proton.x
+    _menu.y = _menu.proton.y
     return _menu
 end
 

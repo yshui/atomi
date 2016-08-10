@@ -6,14 +6,14 @@
 --![Usage example](../images/AUTOGEN_wibox_widget_defaults_graph.svg)
 --
 -- @usage
---wibox.widget {
+--atomi.proton.widget {
 --    max_value = 29,
---    widget = wibox.widget.graph
+--    widget = atomi.proton.widget.graph
 --}
 -- @author Julien Danjou &lt;julien@danjou.info&gt;
 -- @copyright 2009 Julien Danjou
 -- @release v3.5.2-1890-ge472339
--- @classmod wibox.widget.graph
+-- @classmod atomi.proton.widget.graph
 ---------------------------------------------------------------------------
 
 local setmetatable = setmetatable
@@ -21,9 +21,9 @@ local ipairs = ipairs
 local math = math
 local table = table
 local type = type
-local color = require("gears.color")
-local base = require("wibox.widget.base")
-local beautiful = require("beautiful")
+local color = require("atomi.proton.pattern")
+local base = require("atomi.proton.widget.base")
+-- local beautiful = require("beautiful")
 
 local graph = { mt = {} }
 
@@ -37,12 +37,12 @@ local graph = { mt = {} }
 --
 -- @property color
 -- @tparam color color The graph color.
--- @see gears.color.create_pattern
+-- @see atomi.proton.pattern.create_pattern
 
 --- Set the graph background color.
 --
 -- @property background_color
--- @tparam gears.color background_color The graph background color.
+-- @tparam atomi.proton.pattern background_color The graph background color.
 
 --- Set the maximum value the graph should handle.
 -- If "scale" is also set, the graph never scales up below this value, but it
@@ -256,7 +256,7 @@ end
 -- @param args Standard widget() arguments. You should add width and height
 -- key to set graph geometry.
 -- @return A new graph widget.
--- @function wibox.widget.graph
+-- @function atomi.proton.widget.graph
 function graph.new(args)
     args = args or {}
 

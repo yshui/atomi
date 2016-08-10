@@ -13,8 +13,8 @@
 ---------------------------------------------------------------------------
 
 local base = require("atomi.proton.widget.base")
-local color = require("gears.color")
-local surface = require("gears.surface")
+local color = require("atomi.proton.pattern")
+local surface = require("atomi.proton.surface")
 local cairo = require("lgi").cairo
 local util = require("atomi.util")
 local setmetatable = setmetatable
@@ -164,7 +164,7 @@ end
 --}
 -- @property bg
 -- @param bg A color string, pattern or gradient
--- @see gears.color
+-- @see atomi.proton.pattern
 
 function background:set_bg(bg)
     if bg then
@@ -211,7 +211,7 @@ end
 --}
 -- @property fg
 -- @param fg A color string, pattern or gradient
--- @see gears.color
+-- @see atomi.proton.pattern
 
 function background:set_fg(fg)
     if fg then
@@ -311,7 +311,7 @@ end
 -- See `atomi.proton.container.background.shape` for an usage example.
 -- @property shape_border_color
 -- @param[opt=self._private.foreground] fg The border color, pattern or gradient
--- @see gears.color
+-- @see atomi.proton.pattern
 
 function background:set_shape_border_color(fg)
     self._private.shape_border_color = fg
@@ -372,7 +372,7 @@ end
 -- as arguments. Any other arguments passed to this method will be appended.
 -- @property bgimage
 -- @param image A background image or a function
--- @see gears.surface
+-- @see atomi.proton.surface
 
 function background:set_bgimage(image, ...)
     self._private.bgimage = type(image) == "function" and image or surface.load(image)

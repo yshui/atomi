@@ -6,23 +6,22 @@
 --![Usage example](../images/AUTOGEN_wibox_widget_defaults_progressbar.svg)
 --
 -- @usage
---wibox.widget {
+--atomi.proton.widget {
 --    max_value = 1,
 --    value     = 0.33,
---    widget    = wibox.widget.progressbar
+--    widget    = atomi.proton.widget.progressbar
 --}
 -- @author Julien Danjou &lt;julien@danjou.info&gt;
 -- @copyright 2009 Julien Danjou
 -- @release v3.5.2-1890-ge472339
--- @classmod wibox.widget.progressbar
+-- @classmod atomi.proton.widget.progressbar
 ---------------------------------------------------------------------------
 
 local setmetatable = setmetatable
 local ipairs = ipairs
 local math = math
-local base = require("wibox.widget.base")
-local color = require("gears.color")
-local beautiful = require("beautiful")
+local base = require("atomi.proton.widget.base")
+local color = require("atomi.proton.pattern")
 
 local progressbar = { mt = {} }
 
@@ -77,15 +76,6 @@ local data = setmetatable({}, { __mode = "k" })
 -- @param progressbar The progressbar.
 -- @param value The value.
 
---- The progressbar background color.
--- @beautiful beautiful.graph_bg
-
---- The progressbar foreground color.
--- @beautiful beautiful.graph_fg
-
---- The progressbar border color.
--- @beautiful beautiful.graph_border_color
-
 local properties = { "width", "height", "border_color",
                      "color", "background_color",
                      "vertical", "value", "max_value",
@@ -107,7 +97,7 @@ function progressbar.draw(pbar, _, cr, width, height)
     local over_drawn_width = width
     local over_drawn_height = height
     local border_width = 0
-    local col = data[pbar].border_color or beautiful.progressbar_border_color
+    local col = data[pbar].border_color
     if col then
         -- Draw border
         cr:rectangle(0.5, 0.5, width - 1, height - 1)
@@ -121,7 +111,7 @@ function progressbar.draw(pbar, _, cr, width, height)
 
     cr:rectangle(border_width, border_width,
                  over_drawn_width, over_drawn_height)
-    cr:set_source(color(data[pbar].color or beautiful.progressbar_fg or "#ff0000"))
+    cr:set_source(color(data[pbar].color))
     cr:fill()
 
     -- Cover the part that is not set with a rectangle
@@ -131,7 +121,7 @@ function progressbar.draw(pbar, _, cr, width, height)
                      border_width,
                      over_drawn_width,
                      rel_height)
-        cr:set_source(color(data[pbar].background_color or beautiful.progressbar_bg or "#000000aa"))
+        cr:set_source(color(data[pbar].background_color))
         cr:fill()
 
         -- Place smaller pieces over the gradient if ticks are enabled
@@ -146,7 +136,7 @@ function progressbar.draw(pbar, _, cr, width, height)
                                  ticks_gap)
                 end
             end
-            cr:set_source(color(data[pbar].background_color or beautiful.progressbar_bg or "#000000aa"))
+            cr:set_source(color(data[pbar].background_color))
             cr:fill()
         end
     else
@@ -209,6 +199,7 @@ end
 for _, prop in ipairs(properties) do
     if not progressbar["set_" .. prop] then
         progressbar["set_" .. prop] = function(pbar, value)
+            print(prop.."="..tostring(value))
             data[pbar][prop] = value
             pbar:emit_signal("widget::redraw_needed")
             return pbar
@@ -220,7 +211,7 @@ end
 -- @param args Standard widget() arguments. You should add width and height
 -- key to set progressbar geometry.
 -- @return A progressbar widget.
--- @function wibox.widget.progressbar
+-- @function atomi.proton.widget.progressbar
 function progressbar.new(args)
     args = args or {}
     local width = args.width or 100
@@ -230,8 +221,11 @@ function progressbar.new(args)
 
     local pbar = base.make_widget()
 
-    data[pbar] = { width = width, height = height, value = 0, max_value = 1 }
-
+    data[pbar] = { width = width, height = height, value = 0, max_value = 1,
+                   background_color = args.background_color,
+                   color = args.color,
+                   border_color = args.border_color
+                 }
     -- Set methods
     for _, prop in ipairs(properties) do
         pbar["set_" .. prop] = progressbar["set_" .. prop]

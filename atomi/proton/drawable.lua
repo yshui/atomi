@@ -14,9 +14,9 @@ local capi = {
     screen = screen
 }
 local cairo = require("lgi").cairo
-local color = require("gears.color")
+local color = require("atomi.proton.pattern")
 local object = require("gears.object")
-local surface = require("gears.surface")
+local surface = require("atomi.proton.surface")
 local timer = require("gears.timer")
 local grect =  require("gears.geometry").rectangle
 local matrix = require("gears.matrix")
@@ -50,7 +50,6 @@ local function do_redraw(self)
     if self._need_relayout or self._need_complete_repaint then
         self._need_relayout = false
         if self._widget_hierarchy and self.widget then
-            print("call hier::update",width,height)
             self._widget_hierarchy:update(context,
                 self.widget, width, height, self._dirty_area)
         else
@@ -186,7 +185,7 @@ end
 
 --- Set the background of the drawable
 -- @param c The background to use. This must either be a cairo pattern object,
---   nil or a string that gears.color() understands.
+--   nil or a string that atomi.proton.pattern() understands.
 function drawable:set_bg(c)
     c = c or "#000000"
     local t = type(c)
@@ -233,7 +232,7 @@ end
 
 --- Set the foreground of the drawable
 -- @param c The foreground to use. This must either be a cairo pattern object,
---   nil or a string that gears.color() understands.
+--   nil or a string that atomi.proton.pattern() understands.
 function drawable:set_fg(c)
     c = c or "#FFFFFF"
     if type(c) == "string" or type(c) == "table" then
@@ -371,7 +370,6 @@ function drawable.new(d, args, drawable_name)
         if ret._widget_hierarchy_callback_arg ~= arg then
             return
         end
-        print("drawable redraw cb 2")
         local m = hierar:get_matrix_to_device()
         local x, y, width, height = matrix.transform_rectangle(m, hierar:get_draw_extents())
         local x1, y1 = math.floor(x), math.floor(y)

@@ -27,6 +27,8 @@ proton.container = require("atomi.proton.container")
 proton.widget = require("atomi.proton.widget")
 proton.drawable = require("atomi.proton.drawable")
 proton.hierarchy = require("atomi.proton.hierarchy")
+proton.pattern = require("atomi.proton.pattern")
+proton.surface = require("atomi.proton.surface")
 
 local force_forward = {
     shape_bounding = true,
@@ -225,22 +227,22 @@ local force_forward = {
 
 --- The background of the proton.
 -- @param c The background to use. This must either be a cairo pattern object,
---   nil or a string that gears.color() understands.
+--   nil or a string that atomi.proton.pattern() understands.
 -- @property bg
--- @see gears.color
+-- @see atomi.proton.pattern
 
 --- The background image of the drawable.
 -- If `image` is a function, it will be called with `(context, cr, width, height)`
 -- as arguments. Any other arguments passed to this method will be appended.
 -- @param image A background image or a function
 -- @property bgimage
--- @see gears.surface
+-- @see atomi.proton.surface
 
 --- The foreground (text) of the proton.
 -- @param c The foreground to use. This must either be a cairo pattern object,
---   nil or a string that gears.color() understands.
+--   nil or a string that atomi.proton.pattern() understands.
 -- @property fg
--- @see gears.color
+-- @see atomi.proton.pattern
 
 --- Find a widget by a point.
 -- The proton must have drawn itself at least once for this to work.

@@ -54,7 +54,7 @@ function x.get_current_theme()
     for _, key in ipairs(keys) do
         colors[key] = awesome.xrdb_get_value("", key)
         if not colors[key] then
-            gears_debug.print_warning("beautiful: can't get colorscheme from xrdb (using fallback).")
+            gears_debug.print_warning("ugly: can't get colorscheme from xrdb (using fallback).")
             return fallback
         end
         if colors[key]:find("rgb:") then
@@ -110,6 +110,9 @@ end
 -- @tparam[opt] integer|screen s The screen.
 -- @treturn integer Resulting size (rounded to integer).
 function x.apply_dpi(size, s)
+    if s == nil then
+        s = mouse.focused
+    end
     if type(s) ~= "number" then
         return round(size / 96 * x.get_dpi(s))
     else

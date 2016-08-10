@@ -67,11 +67,8 @@ function hierarchy_update(self, context, widget, width, height, region, matrix_t
             matrix.equals(self._matrix, matrix_to_parent) and
             matrix.equals(self._matrix_to_device, matrix_to_device) then
         -- Nothing changed
-        print("nothing changed")
         return
     end
-
-    print("do something")
 
     self._need_update = false
 
@@ -171,7 +168,6 @@ end
 -- @param callback_arg A second argument that is given to the above callbacks.
 -- @return A new widget hierarchy
 function hierarchy.new(context, widget, width, height, redraw_callback, layout_callback, callback_arg)
-    print(debug.traceback())
     local result = hierarchy_new(redraw_callback, layout_callback, callback_arg)
     result:update(context, widget, width, height)
     return result

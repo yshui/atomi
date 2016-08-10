@@ -20,7 +20,7 @@ local util = require("atomi.util")
 local tag = require("atomi.tag")
 local ugly = require("ugly")
 local fixed = require("atomi.proton.layout.fixed")
-local surface = require("gears.surface")
+local surface = require("atomi.proton.surface")
 local timer = require("gears.timer")
 
 local function get_screen(s)

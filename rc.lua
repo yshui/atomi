@@ -10,7 +10,7 @@ print = function(...)
 end
 
 print("Awesome loading rc.lua...")
-local gears = require("gears")
+local awallpaper = require("atomi.wallpaper")
 local atomi = require("atomi")
 require("atomi.autofocus")
 -- Widget and layout library
@@ -21,8 +21,6 @@ local ugly = require("ugly")
 local photon = require("atomi.photon")
 local menubar = atomi.menubar
 local hotkeys_popup = require("atomi.hotkeys_popup").widget
-
-print(type(screen))
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -206,7 +204,6 @@ atomi.screen.connect_for_each_screen(function(s)
 
     ugly.x.set_dpi(dpi, s)
 
-    print(type(screen))
     -- Wallpaper
     if ugly.wallpaper then
         local wallpaper = ugly.wallpaper
@@ -214,7 +211,7 @@ atomi.screen.connect_for_each_screen(function(s)
         if type(wallpaper) == "function" then
             wallpaper = wallpaper(s)
         end
-        gears.wallpaper.maximized(wallpaper, s, true)
+        awallpaper.maximized(wallpaper, s, true)
     end
 
     -- Create a textclock widget
@@ -253,6 +250,7 @@ atomi.screen.connect_for_each_screen(function(s)
             mykeyboardlayout,
             atomi.widget.systray(),
             mytextclock[s],
+            atomi.widget.battery(s, "BAT0"),
             mylayoutbox[s],
         },
     }

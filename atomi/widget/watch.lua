@@ -8,7 +8,7 @@
 -- and it's trimmed in the widget callback function:
 --
 --     211             mytextclock,
---     212             wibox.widget.textbox('  |  '),
+--     212             atomi.proton.widget.textbox('  |  '),
 --     213             -- one way to do that:
 --     214             atomi.widget.watch('bash -c "sensors | grep temp1"', 15),
 --     215             -- another way:
@@ -32,7 +32,7 @@
 ---------------------------------------------------------------------------
 
 local setmetatable = setmetatable
-local textbox = require("wibox.widget.textbox")
+local textbox = require("atomi.proton.widget.textbox")
 local timer = require("gears.timer")
 local spawn = require("atomi.spawn")
 
@@ -61,7 +61,7 @@ local watch = { mt = {} }
 -- For "exit" reason it's the exit code.
 -- For "signal" reason — the signal causing process termination.
 --
--- @param[opt=wibox.widget.textbox()] base_widget Base widget.
+-- @param[opt=atomi.proton.widget.textbox()] base_widget Base widget.
 --
 -- @return The widget used by this watch
 function watch.new(command, timeout, callback, base_widget)

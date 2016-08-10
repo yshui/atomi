@@ -445,11 +445,6 @@ function client.object.to_selected_tags(self)
         if #tags == 0 then
             tags = self.screen.selected_tags
         end
-        print("CLIENT "..self.name)
-        for _, v in ipairs(tags) do
-            print("TAG "..v.name)
-        end
-        print(#tags)
     end
 
     if #tags ~= 0 then
@@ -552,7 +547,6 @@ end
 -- @client c A client.
 -- @param s True or false.
 function client.object.set_floating(c, s)
-    print(c.name..".floating = "..tostring(s))
     c = c or capi.client.focus
     if c and client.property.get(c, "floating") ~= s then
         client.property.set(c, "floating", s)
@@ -988,7 +982,6 @@ end
 -- @param value The value.
 -- @deprecated atomi.client.property.set
 function client.property.set(c, prop, value)
-    print("property.set "..tostring(c.name)..", "..prop.." = "..tostring(value))
     if not client.data.properties[c] then
         client.data.properties[c] = {}
     end

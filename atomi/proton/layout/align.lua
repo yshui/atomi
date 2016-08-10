@@ -5,7 +5,7 @@
 --![Usage example](../images/AUTOGEN_wibox_layout_defaults_align.svg)
 --
 -- @usage
---wibox.widget {
+--atomi.proton.widget {
 --    generic_widget( 'first'  ),
 --    generic_widget( 'second' ),
 --    generic_widget( 'third'  ),

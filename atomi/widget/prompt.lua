@@ -11,8 +11,8 @@ local completion = require("atomi.completion")
 local util = require("atomi.util")
 local spawn = require("atomi.spawn")
 local prompt = require("atomi.prompt")
-local widget_base = require("wibox.widget.base")
-local textbox = require("wibox.widget.textbox")
+local widget_base = require("atomi.proton.widget.base")
+local textbox = require("atomi.proton.widget.textbox")
 local type = type
 
 local widgetprompt = { mt = {} }

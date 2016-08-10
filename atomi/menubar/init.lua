@@ -26,6 +26,12 @@ local capi = {
     mouse = mouse,
     screen = screen
 }
+local autil = require("atomi.util")
+local awidget = require("atomi.widget")
+local ascreen = require("atomi.screen")
+local spawn = require("atomi.spawn")
+local aprompt = require("atomi.prompt")
+local acompletion = require("atomi.completion")
 local common = require("atomi.widget.common")
 local theme = require("ugly")
 local wibox = require("atomi.proton")
@@ -68,7 +74,7 @@ menubar.right_label = "▶▶"
 --- Label used for "Previous page", default "◀◀".
 menubar.left_label = "◀◀"
 
--- atomi.widget.common.list_update adds three times a margin of dpi(4)
+-- awidget.common.list_update adds three times a margin of dpi(4)
 -- for each item:
 local list_interspace = theme.x.apply_dpi(4) * 3
 
@@ -93,7 +99,7 @@ local common_args = { w = wibox.layout.fixed.horizontal(),
 -- @param c The desired text color.
 -- @return the text wrapped in a span tag.
 local function colortext(s, c)
-    return "<span color='" .. atomi.util.ensure_pango_color(c) .. "'>" .. s .. "</span>"
+    return "<span color='" .. autil.ensure_pango_color(c) .. "'>" .. s .. "</span>"
 end
 
 --- Get how the menu item should be displayed.
@@ -108,7 +114,7 @@ local function label(o)
 end
 
 local function load_count_table()
-    local count_file_name = atomi.util.getdir("cache") .. "/menu_count_file"
+    local count_file_name = autil.getdir("cache") .. "/menu_count_file"
 
     local count_file = io.open (count_file_name, "r")
     local count_table = {}
@@ -128,7 +134,7 @@ local function load_count_table()
 end
 
 local function write_count_table(count_table)
-    local count_file_name = atomi.util.getdir("cache") .. "/menu_count_file"
+    local count_file_name = autil.getdir("cache") .. "/menu_count_file"
 
     local count_file = io.open (count_file_name, "w")
 
@@ -155,7 +161,7 @@ local function perform_action(o)
         current_item = 1
         return true, "", new_prompt
     elseif shownitems[current_item].cmdline then
-        atomi.spawn(shownitems[current_item].cmdline)
+        spawn(shownitems[current_item].cmdline)
 
         -- load count_table from cache file
         local count_table = load_count_table()
@@ -224,7 +230,7 @@ end
 local function menulist_update(query, scr)
     query = query or ""
     shownitems = {}
-    local pattern = atomi.util.query_to_pattern(query)
+    local pattern = autil.query_to_pattern(query)
     local match_inside = {}
 
     -- First we add entries which names match the command from the
@@ -292,8 +298,8 @@ local function menulist_update(query, scr)
         table.insert(shownitems, { name = "", cmdline = query, icon = nil })
     end
 
-    common.list_update(common_args.w, nil, label,
-                       common_args.data,
+    common.list_update(common_args.w, theme.get_font(nil, scr), theme.x.get_dpi(scr),
+                       nil, label, common_args.data,
                        get_current_page(shownitems, query, scr))
 end
 
@@ -303,7 +309,7 @@ local function initialize(scr)
     instance.wibox = wibox({})
     instance.widget = menubar.get(scr)
     instance.wibox.ontop = true
-    instance.prompt = atomi.widget.prompt()
+    instance.prompt = awidget.prompt()
     local layout = wibox.layout.fixed.horizontal()
     layout:add(instance.prompt)
     layout:add(instance.widget)
@@ -375,13 +381,13 @@ function menubar.show(scr)
     end
 
     -- Set position and size
-    scr = scr or atomi.screen.focused() or 1
+    scr = scr or ascreen.focused() or 1
     scr = get_screen(scr)
     local scrgeom = capi.screen[scr].workarea
     local geometry = menubar.geometry
     instance.geometry = {x = geometry.x or scrgeom.x,
                              y = geometry.y or scrgeom.y,
-                             height = geometry.height or atomi.util.round(theme.get_font_height() * 1.5),
+                             height = geometry.height or autil.round(theme.get_font_height() * 1.5),
                              width = geometry.width or scrgeom.width}
     instance.wibox:geometry(instance.geometry)
 
@@ -391,10 +397,10 @@ function menubar.show(scr)
 
     local prompt_args = menubar.prompt_args or {}
     prompt_args.prompt = "Run: "
-    atomi.prompt.run(prompt_args, instance.prompt.widget,
+    aprompt.run(prompt_args, instance.prompt.widget,
                 function() end,            -- exe_callback function set to do nothing
-                atomi.completion.shell,     -- completion_callback
-                atomi.util.get_cache_dir() .. "/history_menu",
+                acompletion.shell,     -- completion_callback
+                autil.get_cache_dir() .. "/history_menu",
                 nil,
                 menubar.hide, function(query) menulist_update(query, scr) end,
                 prompt_keypressed_callback

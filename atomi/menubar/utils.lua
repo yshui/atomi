@@ -14,11 +14,11 @@ local ipairs = ipairs
 local string = string
 local screen = screen
 local awful_util = require("atomi.util")
-local theme = require("beautiful")
+local theme = require("ugly")
 local lgi = require("lgi")
 local gio = lgi.Gio
 local glib = lgi.GLib
-local wibox = require("wibox")
+local proton = require("atomi.proton")
 local debug = require("gears.debug")
 
 local utils = {}
@@ -294,7 +294,7 @@ function utils.parse_dir(dir_path, callback)
 end
 
 --- Compute textbox width.
--- @tparam wibox.widget.textbox textbox Textbox instance.
+-- @tparam atomi.proton.widget.textbox textbox Textbox instance.
 -- @tparam number|screen s Screen
 -- @treturn int Text width.
 function utils.compute_textbox_width(textbox, s)
@@ -308,7 +308,7 @@ end
 -- @tparam number|screen s Screen
 -- @treturn int Text width.
 function utils.compute_text_width(text, s)
-    return utils.compute_textbox_width(wibox.widget.textbox(awful_util.escape(text)), s)
+    return utils.compute_textbox_width(proton.widget.textbox(theme.get_font(nil, s), awful_util.escape(text)), s)
 end
 
 return utils

@@ -12,6 +12,7 @@ local capi = {
     client = client,
     keygrabber = keygrabber,
 }
+local atomi = require("atomi")
 local proton = require("atomi.proton")
 local ugly = require("ugly")
 local dpi = ugly.x.apply_dpi
@@ -185,12 +186,13 @@ end
 
 local function group_label(group, color)
     local textbox = proton.widget.textbox(
+        nil, -- font
         markup.font(widget.title_font,
             markup.bg(
                 color or (widget.group_rules[group] and
                     widget.group_rules[group].color or get_next_color("group_title")
                 ),
-                markup.fg(beautiful.bg_normal or "#000000", " "..group.." ")
+                markup.fg(ugly.bg_normal or "#000000", " "..group.." ")
             )
         )
     )
@@ -208,7 +210,7 @@ local function create_wibox(s, available_groups)
         (wa.width - widget.border_width * 2)
 
     -- arrange hotkey groups into columns
-    local line_height = beautiful.get_font_height(widget.title_font)
+    local line_height = ugly.get_font_height(widget.title_font)
     local group_label_height = line_height + widget.group_margin
     -- -1 for possible pagination:
     local max_height_px = height - group_label_height
@@ -275,8 +277,8 @@ local function create_wibox(s, available_groups)
                 end
                 joined_labels = joined_labels .. rendered_hotkey .. (i~=#_keys and "\n" or "")
                 end
-            current_column.layout:add(proton.widget.textbox(joined_labels))
-            local max_width = compute_textbox_width(proton.widget.textbox(max_label_content), s) +
+            current_column.layout:add(proton.widget.textbox(nil, joined_labels))
+            local max_width = compute_textbox_width(proton.widget.textbox(nil, max_label_content), s) +
                                                 widget.group_margin
             if not current_column.max_width or max_width > current_column.max_width then
                 current_column.max_width = max_width
@@ -303,13 +305,13 @@ local function create_wibox(s, available_groups)
     for _, item in ipairs(column_layouts) do
         if item.max_width > available_width_px then
             columns.widgets[#columns.widgets]['widget']:add(
-                group_label("PgDn - Next Page", beautiful.fg_normal)
+                group_label("PgDn - Next Page", ugly.fg_normal)
             )
             table.insert(pages, columns)
             columns = proton.layout.fixed.horizontal()
             available_width_px = width - item.max_width
             local old_widgets = item.layout.widgets
-            item.layout.widgets = {group_label("PgUp - Prev Page", beautiful.fg_normal)}
+            item.layout.widgets = {group_label("PgUp - Prev Page", ugly.fg_normal)}
             atomi.util.table.merge(item.layout.widgets, old_widgets)
         else
             available_width_px = available_width_px - item.max_width
@@ -323,9 +325,9 @@ local function create_wibox(s, available_groups)
 
     local mywibox = proton({
         ontop = true,
-        opacity = beautiful.notification_opacity or 1,
+        opacity = ugly.notification_opacity or 1,
         border_width = widget.border_width,
-        border_color = beautiful.fg_normal,
+        border_color = ugly.fg_normal,
     })
     mywibox:geometry({
         x = wa.x + math.floor((wa.width - width - widget.border_width*2) / 2),
