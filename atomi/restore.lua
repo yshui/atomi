@@ -1,4 +1,7 @@
-local json = require("cjson")
+local ok, json = pcall(require, "cjson")
+
+if not ok then json = require("json") end
+
 local ascreen = require("atomi.screen")
 local atag = require("atomi.tag")
 
@@ -43,7 +46,7 @@ local function _restore()
         end
     end
 
-    --os.remove("/tmp/awesome_state.json")
+    os.remove("/tmp/awesome_state.json")
 end
 
 return _restore
