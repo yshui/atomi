@@ -7,6 +7,11 @@ local ugly = require("ugly")
 local ps_path = "/sys/class/power_supply/"
 local function update_battery(tb, pb, name)
     local f = io.open(ps_path..name.."/energy_full")
+    if f == nil then
+        tb:set_text("")
+        pb:set_width(0)
+        return
+    end
     local full = tonumber(f:read("*all"))
 
     f = io.open(ps_path..name.."/energy_now")

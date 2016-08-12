@@ -1,4 +1,4 @@
-local json = require("json")
+local json = require("cjson")
 local ascreen = require("atomi.screen")
 local atag = require("atomi.tag")
 
@@ -43,7 +43,7 @@ local function _restore()
         end
     end
 
-    os.remove("/tmp/awesome_state.json")
+    --os.remove("/tmp/awesome_state.json")
 end
 
 return _restore
