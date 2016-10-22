@@ -53,7 +53,7 @@ end
 ugly.init(config_root.."theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-term_emu = "urxvt"
+term_emu = "termite"
 terminal = term_emu.." -e tmux"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = term_emu.." -e " .. editor
@@ -473,7 +473,7 @@ atomi.rules.rules = {
     { rule = { class = "URxvt" },
       properties = { size_hints_honor = false } },
     { rule = { class = "Mate-terminal" },
-      properties = { size_hints_honor = false } },
+      properties = { size_hints_honor = true } },
 
     -- Floating clients.
     { rule_any = {

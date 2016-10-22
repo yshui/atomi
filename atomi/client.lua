@@ -675,9 +675,7 @@ function client.object.get_floating(c)
             return value
         end
         if c.type ~= "normal"
-            --or c.fullscreen
-            or c.maximized_vertical
-            or c.maximized_horizontal
+            or c.fullscreen
             or client.object.is_fixed(c) then
             client.object.set_floating(c, true)
             return true

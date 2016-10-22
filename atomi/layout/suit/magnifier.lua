@@ -62,9 +62,14 @@ function magnifier.arrange(p)
     -- Check that the focused window is on the right screen
     if focus and focus.screen ~= p.screen then focus = nil end
 
-    if not focus and #cls > 0 then
-        focus = cls[1]
-        fidx = 1
+    if not focus then
+        if #cls > 0 then
+            focus = cls[1]
+            fidx = 1
+        else
+            -- No clients, give up
+            return
+        end
     end
 
     -- If focused window is not tiled, take the first one which is tiled.
