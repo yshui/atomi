@@ -28,6 +28,34 @@ local function fmax(p, fs)
             width = area.width,
             height = area.height
         }
+        -- Try to honor the aspect ratio in size_hints
+        if c.size_hints ~= nil and c.size_hints_honor then
+            local min_n = c.size_hints["min_aspect_num"]
+            local min_d = c.size_hints["min_aspect_den"]
+            local max_n = c.size_hints["max_aspect_num"]
+            local max_d = c.size_hints["max_aspect_den"]
+            if min_n == nil or min_d == nil then
+                min_n = max_n
+                min_d = max_d
+            elseif max_n == nil or max_d == nil then
+                max_n = min_n
+                max_d = min_d
+            end
+
+            if min_n ~= nil and min_d ~= nil and max_n ~= nil and max_d ~= nil then
+                -- update g according to aspect ratio
+                local ar = g.width/g.height
+                if ar < (min_n/min_d) then
+                    -- not ok 1
+                    g.height = g.width*min_d/min_n
+                    g.y = (area.height-g.height)/2
+                elseif ar > (max_n/max_d) then
+                    -- not ok 2
+                    g.width = g.height*max_n/max_d
+                    g.x = (area.width-g.width)/2
+                end
+            end
+        end
         p.geometries[c] = g
     end
 end
