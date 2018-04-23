@@ -480,6 +480,10 @@ function client.object.to_selected_tags(self)
         end
     end
 
+    if #tags == 0 then
+        tags = root.tags()
+    end
+
     if #tags ~= 0 then
         self:tags(tags)
     end
@@ -671,7 +675,7 @@ function client.object.get_floating(c)
             return value
         end
         if c.type ~= "normal"
-            or c.fullscreen
+            --or c.fullscreen
             or c.maximized_vertical
             or c.maximized_horizontal
             or client.object.is_fixed(c) then

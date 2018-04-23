@@ -92,7 +92,6 @@ atomi.layout.layouts = {
     atomi.layout.suit.fair.horizontal,
     atomi.layout.suit.spiral,
     atomi.layout.suit.spiral.dwindle,
-    atomi.layout.suit.max.fullscreen,
     atomi.layout.suit.magnifier,
     atomi.layout.suit.corner.nw,
     -- atomi.layout.suit.corner.ne,
@@ -291,8 +290,6 @@ globalkeys = atomi.util.table.join(
               {description = "view next", group = "tag"}),
     atomi.key({ modkey,           }, "Escape", atomi.tag.history.restore,
               {description = "go back", group = "tag"}),
-    atomi.key({ modkey,           }, "d", function() atomi.spawn("rofi -show run") end),
-
     atomi.key({ modkey,           }, "j",
         function ()
             atomi.client.focus.byidx( 1)
@@ -333,8 +330,8 @@ globalkeys = atomi.util.table.join(
               {description = "open a terminal", group = "launcher"}),
     atomi.key({ modkey, "Shift"   }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
-    atomi.key({ modkey, "Shift"   }, "e", awesome.quit,
-              {description = "quit awesome", group = "awesome"}),
+    --atomi.key({ modkey, "Shift"   }, "e", awesome.quit,
+    --          {description = "quit awesome", group = "awesome"}),
 
     atomi.key({ modkey,           }, "l",     function () atomi.tag.incmwfact( 0.05)          end,
               {description = "increase master width factor", group = "layout"}),
@@ -489,6 +486,8 @@ atomi.rules.rules = {
      }
     },
     { rule = { class = "URxvt" },
+      properties = { size_hints_honor = false } },
+    { rule = { class = "Mate-terminal" },
       properties = { size_hints_honor = false } },
 
     -- Floating clients.

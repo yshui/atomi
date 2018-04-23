@@ -543,7 +543,7 @@ function photon.notify(args)
             actionmarginbox:set_margins(margin)
             actionmarginbox:set_widget(actiontextbox)
             actiontextbox:set_valign("middle")
-            actiontextbox:set_font(font)
+            actiontextbox:set_font(ugly.get_font(font))
             actiontextbox:set_markup(string.format('☛ <u>%s</u>', action))
             -- calculate the height and width
             local w, h = actiontextbox:get_preferred_size(s)

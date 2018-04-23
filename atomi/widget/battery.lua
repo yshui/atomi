@@ -15,15 +15,24 @@ local function update_battery(tb, pb, name)
     local full = tonumber(f:read("*all"))
 
     f = io.open(ps_path..name.."/energy_now")
+    if f == nil then
+        tb:set_text("")
+        pb:set_width(0)
+        return
+    end
     local now = tonumber(f:read("*all"))
 
     local cent = now / full
 
+    f:close()
     f = io.open(ps_path..name.."/status")
-    local status = "Discharging"
-    if f ~= nil then
-        status = f:read("*line")
+    if f == nil then
+        tb:set_text("")
+        pb:set_width(0)
+        return
     end
+    local status = "Discharging"
+    status = f:read("*line")
 
     local color = ugly.fg_normal
     if status == "Discharging" then
@@ -38,6 +47,7 @@ local function update_battery(tb, pb, name)
 
     tb:set_markup("<span color=\"#ffffff\">"..tostring(math.floor(cent*100)).."%</span>")
     pb:set_value(cent)
+    f:close()
 end
 function battery.new(s, name)
     s = s and screen[s]
