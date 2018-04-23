@@ -96,7 +96,6 @@ function imagebox:set_image(image)
     if type(image) == "string" then
         image = surface.load(image)
         if not image then
-            print(debug.traceback())
             return false
         end
     end

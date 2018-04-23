@@ -31,6 +31,7 @@ local textbox = { mt = {} }
 --- Set the DPI of a Pango layout
 local function setup_dpi(self, dpi)
     if self._private.dpi ~= dpi then
+        print("New dpi", tostring(self._private.dpi), tostring(dpi))
         self._private.dpi = dpi
         self._private.ctx:set_resolution(dpi)
         self._private.layout:context_changed()

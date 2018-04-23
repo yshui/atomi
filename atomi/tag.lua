@@ -754,7 +754,7 @@ end
 -- @tparam[opt] int|screen screen The screen.
 function tag.viewnone(screen)
     screen = screen or ascreen.focused()
-    local tags = screen.tags
+    local tags = screen.selected_tags
     for _, t in pairs(tags) do
         t.selected = false
     end
@@ -769,7 +769,7 @@ end
 -- @param[opt] screen The screen.
 function tag.viewidx(i, screen)
     screen = get_screen(screen or ascreen.focused())
-    local tags = screen.tags
+    local tags = root.tags()
     local showntags = {}
     for _, t in ipairs(tags) do
         if not tag.getproperty(t, "hide") then
@@ -780,7 +780,9 @@ function tag.viewidx(i, screen)
     tag.viewnone(screen)
     for k, t in ipairs(showntags) do
         if t == sel then
-            showntags[util.cycle(#showntags, k + i)].selected = true
+            local nidx = util.cycle(#showntags, k+i)
+            showntags[nidx].selected = true
+            showntags[nidx].screen = screen
         end
     end
     screen:emit_signal("tag::history::update")

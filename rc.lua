@@ -1,6 +1,7 @@
 -- Standard awesome library
 local config_root = os.getenv("HOME").."/.config/awesome/"
 local logf = io.open(config_root.."awesome.log", "a")
+local vlogf = io.open("/tmp/awesome.0.log", "w")
 logf:write("\n\n")
 print = function(...)
 	logf:write(os.date("[%c] "))
@@ -21,6 +22,21 @@ local ugly = require("ugly")
 local photon = require("atomi.photon")
 local menubar = atomi.menubar
 local hotkeys_popup = require("atomi.hotkeys_popup").widget
+
+local function dump_func()
+    local info = debug.getinfo(2, "Sl")
+    if string.find(info.source, "shui") == nil then
+        return
+    end
+
+    local name = debug.getinfo(2, "n").name
+    if name == nil then
+        name = "(nil)"
+    end
+    vlogf:write(name..info.source..":"..tostring(info.currentline).."\n")
+    vlogf:flush()
+end
+-- debug.sethook(dump_func, "c")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -90,7 +106,7 @@ local function client_menu_toggle_fn()
     local instance = nil
 
     return function ()
-        if instance and instance.wibox.visible then
+        if instance and instance.proton.visible then
             instance:hide()
             instance = nil
         else
@@ -133,22 +149,6 @@ mypromptbox = {}
 mylayoutbox = {}
 mytextclock = {}
 mytaglist = {}
-mytaglist.buttons = atomi.util.table.join(
-                    atomi.button({ }, 1, function(t) t:view_only() end),
-                    atomi.button({ modkey }, 1, function(t)
-                                              if client.focus then
-                                                  client.focus:move_to_tag(t)
-                                              end
-                                          end),
-                    atomi.button({ }, 3, function(t) t:view_toggle() end),
-                    atomi.button({ modkey }, 3, function(t)
-                                              if client.focus then
-                                                  client.focus:toggle_tag(t)
-                                              end
-                                          end),
-                    atomi.button({ }, 4, function(t) atomi.tag.viewnext(t.screen) end),
-                    atomi.button({ }, 5, function(t) atomi.tag.viewprev(t.screen) end)
-                )
 
 mytasklist = {}
 mytasklist.buttons = atomi.util.table.join(
@@ -227,7 +227,23 @@ atomi.screen.connect_for_each_screen(function(s)
                            atomi.button({ }, 4, function () atomi.layout.inc( 1) end),
                            atomi.button({ }, 5, function () atomi.layout.inc(-1) end)))
     -- Create a taglist widget
-    mytaglist[s] = atomi.widget.taglist(s, atomi.widget.taglist.filter.all, mytaglist.buttons)
+    local taglist_buttons = atomi.util.table.join(
+                    atomi.button({ }, 1, function(t) t:view_only() end),
+                    atomi.button({ modkey }, 1, function(t)
+                                              if client.focus then
+                                                  client.focus:move_to_tag(t)
+                                              end
+                                          end),
+                    atomi.button({ }, 3, function(t) t:view_toggle() end),
+                    atomi.button({ modkey }, 3, function(t)
+                                              if client.focus then
+                                                  client.focus:toggle_tag(t)
+                                              end
+                                          end),
+                    atomi.button({ }, 4, function(t) atomi.tag.viewnext(s) end),
+                    atomi.button({ }, 5, function(t) atomi.tag.viewprev(s) end)
+                )
+    mytaglist[s] = atomi.widget.taglist(s, atomi.widget.taglist.filter.all, taglist_buttons)
 
     -- Create a tasklist widget
     mytasklist[s] = atomi.widget.tasklist(s, atomi.widget.tasklist.filter.currenttags, mytasklist.buttons)
@@ -247,7 +263,7 @@ atomi.screen.connect_for_each_screen(function(s)
         mytasklist[s], -- Middle widget
         { -- Right widgets
             layout = proton.layout.fixed.horizontal,
-            mykeyboardlayout,
+            -- mykeyboardlayout,
             atomi.widget.systray(),
             mytextclock[s],
             atomi.widget.battery(s, "BAT0"),

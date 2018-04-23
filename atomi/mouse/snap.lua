@@ -14,6 +14,7 @@ local ugly      = require("ugly")
 local color     = require("atomi.proton.pattern")
 local shape     = require("gears.shape")
 local cairo     = require("lgi").cairo
+local proton    = require("atomi.proton")
 
 local capi = {
     root = root,
@@ -37,9 +38,9 @@ local function show_placeholder(geo)
         return
     end
 
-    placeholder_w = placeholder_w or wibox {
+    placeholder_w = placeholder_w or proton {
         ontop = true,
-        bg    = color(beautiful.snap_bg or beautiful.bg_urgent or "#ff0000"),
+        bg    = color(ugly.snap_bg or ugly.bg_urgent or "#ff0000"),
     }
 
     placeholder_w:geometry(geo)
@@ -53,10 +54,10 @@ local function show_placeholder(geo)
     cr:set_operator(cairo.Operator.SOURCE)
     cr:set_source_rgba(1,1,1,1)
 
-    local line_width = beautiful.snap_border_width or 5
-    cr:set_line_width(beautiful.xresources.apply_dpi(line_width))
+    local line_width = ugly.snap_border_width or 5
+    cr:set_line_width(ugly.x.apply_dpi(line_width))
 
-    local f = beautiful.snap_shape or function()
+    local f = ugly.snap_shape or function()
         cr:translate(line_width,line_width)
         shape.rounded_rect(cr,geo.width-2*line_width,geo.height-2*line_width, 10)
     end

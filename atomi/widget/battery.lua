@@ -20,16 +20,18 @@ local function update_battery(tb, pb, name)
     local cent = now / full
 
     f = io.open(ps_path..name.."/status")
-    local status = f:read("*line")
-    print(status)
+    local status = "Discharging"
+    if f ~= nil then
+        status = f:read("*line")
+    end
 
     local color = ugly.fg_normal
     if status == "Discharging" then
         color = "#ff2000"
     elseif status == "Charging" then
         color = "#f0c020"
-    elseif stauts == "Unknown" or status == "Charged" then
-        color = "#20f020"
+    elseif status == "Unknown" or status == "Charged" then
+        color = "#20a040"
     end
 
     pb:set_color(color)
@@ -46,7 +48,7 @@ function battery.new(s, name)
     local pb = widgets.progressbar({ border_color =  ugly.progressbar_border_color or "#ffffff",
                                      background_color = ugly.bg_normal,
                                      color = ugly.fg_normal,
-                                     width = 20
+                                     width = 10
                                    })
 
     pb:set_vertical(true)
