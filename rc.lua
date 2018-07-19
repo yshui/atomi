@@ -23,21 +23,6 @@ local photon = require("atomi.photon")
 local menubar = atomi.menubar
 local hotkeys_popup = require("atomi.hotkeys_popup").widget
 
-local function dump_func()
-    local info = debug.getinfo(2, "Sl")
-    if string.find(info.source, "shui") == nil then
-        return
-    end
-
-    local name = debug.getinfo(2, "n").name
-    if name == nil then
-        name = "(nil)"
-    end
-    vlogf:write(name..info.source..":"..tostring(info.currentline).."\n")
-    vlogf:flush()
-end
--- debug.sethook(dump_func, "c")
-
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
