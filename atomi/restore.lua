@@ -1,6 +1,10 @@
-local ok, json = pcall(require, "cjson")
+local ok, mpack = pcall(require, "mpack")
 
-if not ok then json = require("json") end
+if not ok then
+    local function _dummy()
+    end
+    return _dummy
+end
 
 local ascreen = require("atomi.screen")
 local atag = require("atomi.tag")
@@ -15,8 +19,9 @@ local function save_state()
         stags[s.name] = tags
     end
 
-    local outf = io.output("/tmp/awesome_state.json")
-    outf:write(json.encode(stags))
+    local outf = io.output("/tmp/awesome_state.mpack")
+    local pack = mpack.Packer()
+    outf:write(pack(stags))
 end
 
 awesome.connect_signal("exit", function(restart)
@@ -26,15 +31,16 @@ awesome.connect_signal("exit", function(restart)
 end)
 
 local function _restore()
-    local inf = io.open("/tmp/awesome_state.json")
+    local inf = io.open("/tmp/awesome_state.mpack")
     if inf == nil then
         return
     end
 
     local o = inf:read("*all")
-    print("Restoring: "..o)
+    print("Restoring: ")
 
-    local stags = json.decode(o)
+    local unpack = mpack.Unpacker()
+    local stags = unpack(o)
 
     for s in screen do
         if stags[s.name] then
@@ -46,7 +52,7 @@ local function _restore()
         end
     end
 
-    os.remove("/tmp/awesome_state.json")
+    os.remove("/tmp/awesome_state.mpack")
 end
 
 return _restore
