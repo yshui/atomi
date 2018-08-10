@@ -22,6 +22,7 @@ local base = require("atomi.proton.widget.base")
 local gdebug = require("gears.debug")
 local lgi = require("lgi")
 local util = require("atomi.util")
+local ugly = require("ugly")
 local Pango = lgi.Pango
 local PangoCairo = lgi.PangoCairo
 local setmetatable = setmetatable
@@ -31,7 +32,6 @@ local textbox = { mt = {} }
 --- Set the DPI of a Pango layout
 local function setup_dpi(self, dpi)
     if self._private.dpi ~= dpi then
-        print("New dpi", tostring(self._private.dpi), tostring(dpi))
         self._private.dpi = dpi
         self._private.ctx:set_resolution(dpi)
         self._private.layout:context_changed()
@@ -237,7 +237,7 @@ end
 -- @param Pango.FontDescription The font description as string
 
 function textbox:set_font(font)
-    self._private.layout:set_font_description(font)
+    self._private.layout:set_font_description(ugly.get_font(font))
     self:emit_signal("widget::redraw_needed")
     self:emit_signal("widget::layout_changed")
 end
