@@ -53,7 +53,7 @@ end
 ugly.init(config_root.."theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-term_emu = "termite"
+term_emu = "alacritty"
 terminal = term_emu.." -e tmux"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = term_emu.." -e " .. editor
