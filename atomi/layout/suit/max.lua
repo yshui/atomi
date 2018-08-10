@@ -48,11 +48,11 @@ local function fmax(p, fs)
                 if ar < (min_n/min_d) then
                     -- not ok 1
                     g.height = g.width*min_d/min_n
-                    g.y = (area.height-g.height)/2
+                    g.y = (area.height-g.height)/2+area.y
                 elseif ar > (max_n/max_d) then
                     -- not ok 2
                     g.width = g.height*max_n/max_d
-                    g.x = (area.width-g.width)/2
+                    g.x = (area.width-g.width)/2+area.x
                 end
             end
         end
