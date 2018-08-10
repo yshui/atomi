@@ -114,7 +114,7 @@ photon.config.defaults = {
     ontop = true,
     margin = dpi(5),
     border_width = dpi(1),
-    position = "top_right"
+    position = "bottom_right"
 }
 
 photon.notificationClosedReason = {
