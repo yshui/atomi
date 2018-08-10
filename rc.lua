@@ -390,6 +390,10 @@ clientkeys = atomi.util.table.join(
     atomi.key({ modkey, "Shift"   }, "m",
         function (c)
             c.maximized = not c.maximized
+            if not c.maximized then
+                c.maximized_horizontal = false
+                c.maximized_vertical = false
+            end
             c:raise()
         end ,
         {description = "maximize", group = "client"})
