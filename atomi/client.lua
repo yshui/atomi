@@ -674,9 +674,12 @@ function client.object.get_floating(c)
         if value ~= nil then
             return value
         end
-        if c.type ~= "normal"
-            or c.fullscreen
-            or client.object.is_fixed(c) then
+        --print(debug.traceback())
+        if c.fullscreen then
+            return true
+        end
+        if c.type ~= "normal" or
+           client.object.is_fixed(c) then
             client.object.set_floating(c, true)
             return true
         end

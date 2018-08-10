@@ -201,9 +201,9 @@ function layout.getname(_layout)
 end
 
 local function arrange_prop_nf(obj)
-    if not client.object.get_floating(obj) then
+    --if not client.object.get_floating(obj) then
         layout.arrange(obj.screen)
-    end
+    --end
 end
 
 local function arrange_prop(obj) layout.arrange(obj.screen) end
