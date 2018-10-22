@@ -196,6 +196,9 @@ atomi.screen.connect_for_each_screen(function(s)
             wallpaper = wallpaper(s)
         end
         awallpaper.maximized(wallpaper, s, true)
+        s:connect_signal("property::geometry", function()
+            awallpaper.maximized(wallpaper, s, true)
+        end)
     end
 
     -- Create a textclock widget
