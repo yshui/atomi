@@ -101,7 +101,7 @@ local function do_corner(p, orientation)
             master.height = wa.height
         end
         if #cls < 2  then
-            if tag.getmfpol(t) == "expand" then
+            if t.master_fill_policy == "expand" then
                 master = wa
             else
                 master.x = master.x + (wa.width - master.width)/2

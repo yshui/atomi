@@ -328,7 +328,7 @@ globalkeys = atomi.util.table.join(
     atomi.key({ modkey, "Shift"   }, "h",     function () atomi.tag.incnmaster( 1, nil, true) end,
               {description = "increase the number of master clients", group = "layout"}),
     atomi.key({ modkey, "Shift"   }, "l",     function () atomi.tag.incnmaster(-1, nil, true) end,
-              screen{description = "decrease the number of master clients", group = "layout"}),
+              {description = "decrease the number of master clients", group = "layout"}),
     atomi.key({ modkey, "Control" }, "h",     function () atomi.tag.incncol( 1, nil, true)    end,
               {description = "increase the number of columns", group = "layout"}),
     atomi.key({ modkey, "Control" }, "l",     function () atomi.tag.incncol(-1, nil, true)    end,
