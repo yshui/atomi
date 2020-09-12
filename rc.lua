@@ -290,8 +290,8 @@ globalkeys = atomi.util.table.join(
         end,
         {description = "focus previous by index", group = "client"}
     ),
-    atomi.key({ modkey,           }, "w", function () mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
+    --atomi.key({ modkey,           }, "w", function () mymainmenu:show() end,
+              --{description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
     atomi.key({ modkey, "Shift"   }, "j", function () atomi.client.swap.byidx(  1)    end,
@@ -475,10 +475,12 @@ atomi.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons,
                      placement = atomi.placement.no_overlap+atomi.placement.no_offscreen,
-                     titlebars_enabled = false
+                     titlebars_enabled = false,
      }
     },
     { rule = { class = "URxvt" },
+      properties = { size_hints_honor = false } },
+    { rule = { class = "Steam" },
       properties = { size_hints_honor = false } },
     { rule = { class = "Mate-terminal" },
       properties = { size_hints_honor = true } },
@@ -551,7 +553,7 @@ client.connect_signal("request::titlebars", function(c)
         end)
     )
 
-    atomi.titlebar(c) : setup {
+    atomi.titlebar(c, {bg_normal = '#ff000000', bg_focus = '#ff000000'}) : setup {
         { -- Left
             atomi.titlebar.widget.iconwidget(c),
             buttons = buttons,
