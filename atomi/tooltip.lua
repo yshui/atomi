@@ -254,10 +254,11 @@ tooltip.new = function(args)
         bg = ugly.tooltip_bg_color or ugly.bg_focus or "#ffcb60"
     }
     local fg = ugly.tooltip_fg_color or ugly.fg_focus or "#000000"
-    local font = ugly.tooltip_font or ugly.font or "terminus 6"
+    local font = ugly.tooltip_font or ugly.font or "terminus 12"
 
+    local tooltip_screen = args.screen or mouse.screen
     self.textbox = textbox()
-    self.textbox:set_font(ugly.get_font(font, mouse.screen))
+    self.textbox:set_font(ugly.get_font(font, tooltip_screen))
     self.background = background(self.textbox)
     self.background:set_fg(fg)
 
